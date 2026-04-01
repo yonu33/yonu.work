@@ -15,7 +15,7 @@ export const profile = {
     { label: "名前", value: "yonu (yonu33)" },
     { label: "生年月日", value: "2006年10月12日" },
     { label: "出身地", value: "宮城県仙台市" },
-    { label: "所属", value: "会津大学コンピュータ理工学部（33期生）、GDGoC Aizu (Co-Organizer)" },
+    { label: "所属", value: "会津大学コンピュータ理工学部（33期生）\nGDGoC Aizu (Organizer)" },
     { label: "サークル", value: "カンフー部、DMC、Zli etc..." },
     { label: "趣味", value: "旅行、言語学習、映画鑑賞、レトロゲーム" },
     { label: "関心領域", value: "AI / LLM、Web開発、マイコン、3Dプリント、近距離無線通信、Discord Bot開発"}
