@@ -1185,6 +1185,7 @@ body * {
 
 /* トップのチケット */
 .ticket-photo span { font-size: .75rem; letter-spacing: .06em; }   /* 旅好きな学生エンジニア */
+.ticket-caption { word-break: keep-all; overflow-wrap: normal; }
 .ticket-bio { font-size: .95rem; }                                   /* 会津大学… */
 .ticket-role { font-size: .8rem; line-height: 1.6; }                 /* GDGoC Aizu Organizer / … */
 
