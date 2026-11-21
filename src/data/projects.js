@@ -2,6 +2,8 @@ export const projects = [
   {
     id: "MoveGUI-by-Hand",
     title: "MoveGUI by Hand",
+    // カードの表面に出す主な技術（2〜3個）
+    tags: ["Python", "MediaPipe", "Raspberry Pi"],
     period: "2024.03 - 2025.01",
     summary: "MediaPipeを用いたハンドジェスチャ画面操作アプリ",
     description: "高校時代に課題研究で制作。MediaPipeを用いたハンドジェスチャ認識によって、上下スクロールやクリック操作のような画面操作をWebカメラを通して非接触で可能としたアプリケーション。",
@@ -15,6 +17,7 @@ export const projects = [
   {
     id: "gakushoku-bot",
     title: "gakushoku-bot",
+    tags: ["JavaScript", "Cloudflare Workers", "Discord"],
     period: "2025.11",
     summary: "毎日定時に会津大学の学食メニューをDiscordへ通知するBot",
     description: "毎日定時に会津大学の学食メニューをDiscordへ通知するアプリケーション。10:00に『日替わりランチ』、15:30に『夕食セット』、19:00に『明日のメニュー予告』を通知する。",
@@ -28,6 +31,7 @@ export const projects = [
   {
     id: "uoa-hub-auth-bot",
     title: "uoa-hub-auth-bot",
+    tags: ["JavaScript", "Cloudflare Workers", "GAS"],
     period: "2025.11",
     summary: "大学Discordのメール認証＆自動ロール付与システム",
     description: "大学コミュニティや関連団体のDiscordサーバー参加者向けのメール認証システム。大学ドメインのメールアドレスで認証し、自動でロールを付与する。",
@@ -43,6 +47,7 @@ export const projects = [
   {
     id: "akabeko-reminder-bot",
     title: "akabeko-reminder-bot",
+    tags: ["Python", "discord.py", "Docker"],
     period: "2026.01",
     summary: "会津弁で喋る中規模コミュニティ向けリマインダーBot",
     description: "Discord上で登録した予定をロールまたはユーザ個人単位に向けて会津弁でメンションする、中規模コミュニティ向けリマインダーBot。",
@@ -57,6 +62,7 @@ export const projects = [
   {
     id: "motsuku",
     title: "もうつく",
+    tags: ["TypeScript", "React", "Hono"],
     period: "2026.10",
     summary: "位置情報で待ち合わせを支援するWebアプリ",
     description: "JPHACKS 2026 Hack Day（仙台会場）でチーム開発した、遅刻する側と待つ側の双方を支援する位置情報共有Webアプリ。バックエンドを主に担当し、ルーム管理や位置情報共有など、アプリの中核となる仕組みの構築に取り組んだ。",

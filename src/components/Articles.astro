@@ -6,39 +6,32 @@ const platformConfig = {
   Blog:  { color: "text-[var(--text-main)]", bgColor: "bg-[var(--border-color)]" },
 };
 
-const articles = [
-  {
-    platform: "Qiita",
-    title: "大学メールアドレスによるメール認証システムを作ってDiscordの大学コミュニティに導入した話",
-    url: "https://qiita.com/yonu/items/fcaac74ca97eb41835b7",
-    date: "2025.12.09",
-    thumbnail: "https://qiita-user-contents.imgix.net/https%3A%2F%2Fqiita-image-store.s3.ap-northeast-1.amazonaws.com%2F0%2F4281160%2F476e210c-cc92-4c42-85a9-4e2eea497be0.png?ixlib=rb-4.0.0&auto=format&gif-q=60&q=75&w=1400&fit=max&s=4a68ad2067b25005a9251df71e4179d9"
-  },
-  {
-    platform: "note",
-    title: "Visual Studio CodeでRemote SSHのすすめ～自宅でも大学の課題をする方法～【会津大生向け】",
-    url: "https://note.com/yonu33/n/n2391204a1fbe",
-    date: "2025.11.15",
-    thumbnail: "https://assets.st-note.com/production/uploads/images/229398634/rectangle_large_type_2_1f13574cfc3f0f93c4462d0d78cebe99.png?width=1280"
-  }
-];
+// ビルド時に Qiita / Zenn / note から新しい順に取得する（src/lib/articles.js）
+import { getArticles } from '../lib/articles.js';
+const articles = await getArticles();
 ---
 
 <div>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-8">
     {articles.map(article => {
       const style = platformConfig[article.platform] || platformConfig.Blog;
-      const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(article.thumbnail)}&w=800&af`;
+      const proxyUrl = article.thumbnail
+        ? `https://images.weserv.nl/?url=${encodeURIComponent(article.thumbnail)}&w=800&af`
+        : '';
 
       return (
         <a href={article.url} target="_blank" rel="noopener noreferrer" class="group block">
-          <div class="aspect-video w-full overflow-hidden border border-[var(--border-color)] group-hover:border-[var(--accent-strong)] transition-colors mb-4 bg-[var(--bg-card)]">
-            <img 
-              src={proxyUrl} 
-              alt=""
-              loading="lazy"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-            />
+          <div class="aspect-video w-full overflow-hidden border border-[var(--border-color)] group-hover:border-[var(--accent-strong)] transition-colors mb-4 bg-[var(--bg-card)] flex items-center justify-center">
+            {proxyUrl ? (
+              <img
+                src={proxyUrl}
+                alt=""
+                loading="lazy"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            ) : (
+              <span class={`text-2xl font-bold ${style.color}`} aria-hidden="true">{article.platform}</span>
+            )}
           </div>
           
           <div class="flex items-center gap-2 mb-2">

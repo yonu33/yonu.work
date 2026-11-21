@@ -1008,3 +1008,77 @@ body,
 body * {
   font-family: "DotGothic16", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif !important;
 }
+
+/* ---------- 作ったもののカード：技術タグと外部リンク ---------- */
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-tags li {
+  padding: .1rem .5rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-page);
+  color: var(--text-muted);
+  font-size: .72rem;
+  line-height: 1.6;
+}
+
+.project-link {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-decoration-color: var(--border-color);
+  text-underline-offset: 3px;
+}
+
+.project-link:hover {
+  color: var(--accent-strong);
+  text-decoration-color: currentColor;
+}
+
+/* =========================================================
+   文字サイズの底上げ
+   小さすぎて読みにくかった文字の大きさを、ここでまとめて上書きする。
+   （ファイル末尾に置いているので、上の指定や Tailwind の text-[10px] などより優先される）
+   ========================================================= */
+
+/* トップのチケット */
+.ticket-photo span { font-size: .75rem; letter-spacing: .06em; }   /* 旅好きな学生エンジニア */
+.ticket-bio { font-size: .95rem; }                                   /* 会津大学… */
+.ticket-role { font-size: .8rem; line-height: 1.6; }                 /* GDGoC Aizu Organizer / … */
+
+/* 見出し・ラベル */
+.section-title p { font-size: .75rem; }                              /* BASE PROFILE など */
+.retro-label { font-size: .75rem; }                                  /* 名前・生年月日、連絡先の項目名 */
+.journey-card-head { font-size: .72rem; }                            /* LOG / 01・期間 */
+.ticket-label { font-size: .78rem; }                                 /* 記録の日付 */
+.github-contributions-head span { font-size: .72rem; }
+.github-contributions-head strong { font-size: .78rem; }
+.project-popover-head { font-size: .8rem; }
+.project-popover-stack dt { font-size: .78rem; }
+
+/* 記事・相互リンク・フッター（Tailwind の text-[10px] / text-[11px] を上書き） */
+#articles .text-\[10px\],
+#mutual-links .text-\[10px\] { font-size: .75rem; }
+footer .text-\[11px\] { font-size: .78rem; }
+
+@media (max-width: 767px) {
+  /* 写真欄（幅105px）に収まるよう、中央揃えで折り返す */
+  .ticket-photo span {
+    font-size: .66rem;
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-align: center;
+    padding: 0 .4rem;
+  }
+
+  .ticket-bio { font-size: .82rem; }
+  .ticket-role { font-size: .72rem; }
+  .ticket-name > p.ticket-meta-line { font-size: .62rem; }
+
+  .section-dock strong { font-size: .66rem; }
+}

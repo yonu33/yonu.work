@@ -21,6 +21,16 @@ const tocItems = [
   { id: 'links', name: 'LINKS' },
 ];
 
+// スマホ・タブレット用の下部ナビ。icon は Material Design Icons（mdi）の SVG パス
+const dockItems = [
+  { name: 'Top', href: '/#top', icon: 'm12 5.69l5 4.5V18h-2v-6H9v6H7v-7.81zM12 3L2 12h3v8h6v-6h2v6h6v-8h3' }, // home-outline
+  { name: 'Profile', href: '/#profile', icon: 'M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 2a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2m0 7c2.67 0 8 1.33 8 4v3H4v-3c0-2.67 5.33-4 8-4m0 1.9c-2.97 0-6.1 1.46-6.1 2.1v1.1h12.2V17c0-.64-3.13-2.1-6.1-2.1' }, // account-outline
+  { name: 'Projects', href: '/#projects', icon: 'M3 11h8V3H3m2 2h4v4H5m8 12h8v-8h-8m2 2h4v4h-4M3 21h8v-8H3m2 2h4v4H5m8-16v8h8V3m-2 6h-4V5h4Z' }, // view-grid-outline
+  { name: 'History', href: '/#history', icon: 'M4 2v6H2V2zM2 22v-6h2v6zm3-10c0 1.11-.89 2-2 2a2 2 0 1 1 2-2m11-8c4.42 0 8 3.58 8 8s-3.58 8-8 8c-3.6 0-6.64-2.38-7.65-5.65L6 12l2.35-2.35C9.36 6.38 12.4 4 16 4m0 2c-3.31 0-6 2.69-6 6s2.69 6 6 6s6-2.69 6-6s-2.69-6-6-6m-1 7V8h1.5v4.2l3 1.8l-.82 1.26z' }, // timeline-clock-outline
+  { name: 'Articles', href: '/#articles', icon: 'M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 2h7v5h5v11H6zm2 8v2h8v-2zm0 4v2h5v-2z' }, // file-document-outline
+  { name: 'Links', href: '/#links', icon: 'M10.59 13.41c.41.39.41 1.03 0 1.42c-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0a5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.98 2.98 0 0 0 0-4.24a2.98 2.98 0 0 0-4.24 0l-3.53 3.53a2.98 2.98 0 0 0 0 4.24m2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0a5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.43l-.47.47a2.98 2.98 0 0 0 0 4.24a2.98 2.98 0 0 0 4.24 0l3.53-3.53a2.98 2.98 0 0 0 0-4.24a.973.973 0 0 1 0-1.42' }, // link-variant
+];
+
 // 右サイドの「次のセクション」はトップページでだけ出す
 const isHome = Astro.url.pathname === '/';
 ---
@@ -41,7 +51,8 @@ const isHome = Astro.url.pathname === '/';
 
     <meta name="theme-color" content={discordEmbedColor} />
 
-    <meta name="twitter:card" content="summary_large_image" />
+    <!-- OGP 画像が正方形のアイコンなので、切れずに表示される小さいカードにする -->
+    <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@yonu33" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={siteDescription} />
@@ -49,7 +60,6 @@ const isHome = Astro.url.pathname === '/';
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet" />
-    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
   
     <script is:inline>
       const theme = (() => {
@@ -111,12 +121,14 @@ const isHome = Astro.url.pathname === '/';
       <slot />
     </main>
     <nav class="section-dock" aria-label="ページ内リンク">
-      <a href="/#top"><span aria-hidden="true"><iconify-icon icon="mdi:home-outline"></iconify-icon></span><strong>Top</strong></a>
-      <a href="/#profile"><span aria-hidden="true"><iconify-icon icon="mdi:account-outline"></iconify-icon></span><strong>Profile</strong></a>
-      <a href="/#projects"><span aria-hidden="true"><iconify-icon icon="mdi:view-grid-outline"></iconify-icon></span><strong>Projects</strong></a>
-      <a href="/#history"><span aria-hidden="true"><iconify-icon icon="mdi:timeline-clock-outline"></iconify-icon></span><strong>History</strong></a>
-      <a href="/#articles"><span aria-hidden="true"><iconify-icon icon="mdi:file-document-outline"></iconify-icon></span><strong>Articles</strong></a>
-      <a href="/#links"><span aria-hidden="true"><iconify-icon icon="mdi:link-variant"></iconify-icon></span><strong>Links</strong></a>
+      {dockItems.map(item => (
+        <a href={item.href}>
+          <span aria-hidden="true">
+            <svg width="1em" height="1em" viewBox="0 0 24 24" style="display:inline-block;vertical-align:-0.125em"><path fill="currentColor" d={item.icon} /></svg>
+          </span>
+          <strong>{item.name}</strong>
+        </a>
+      ))}
     </nav>
   </body>
 </html>
