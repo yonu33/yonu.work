@@ -16,7 +16,7 @@ const articles = [
   },
   {
     platform: "note",
-    title: "Visual Studio CodeでRemote SSH of theすすめ～自宅でも大学の課題をする方法～【会津大生向け】",
+    title: "Visual Studio CodeでRemote SSHのすすめ～自宅でも大学の課題をする方法～【会津大生向け】",
     url: "https://note.com/yonu33/n/n2391204a1fbe",
     date: "2025.11.15",
     thumbnail: "https://assets.st-note.com/production/uploads/images/229398634/rectangle_large_type_2_1f13574cfc3f0f93c4462d0d78cebe99.png?width=1280"
@@ -24,17 +24,15 @@ const articles = [
 ];
 ---
 
-<section class="mb-16 md:mb-20 px-1 md:px-0">
-  <h2 class="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)] font-bold mb-6 md:mb-8 italic">■ Recent Articles</h2>
-  
+<div>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-8">
     {articles.map(article => {
       const style = platformConfig[article.platform] || platformConfig.Blog;
       const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(article.thumbnail)}&w=800&af`;
 
       return (
-        <a href={article.url} target="_blank" class="group block">
-          <div class="aspect-video w-full overflow-hidden rounded-xl md:rounded-2xl border border-[var(--border-color)] mb-4 bg-[var(--bg-card)]">
+        <a href={article.url} target="_blank" rel="noopener noreferrer" class="group block">
+          <div class="aspect-video w-full overflow-hidden border border-[var(--border-color)] group-hover:border-[var(--accent-strong)] transition-colors mb-4 bg-[var(--bg-card)]">
             <img 
               src={proxyUrl} 
               alt=""
@@ -44,17 +42,17 @@ const articles = [
           </div>
           
           <div class="flex items-center gap-2 mb-2">
-            <span class={`text-[10px] font-bold px-2 py-0.5 rounded ${style.bgColor} ${style.color}`}>
+            <span class={`text-[10px] font-bold px-2 py-0.5 ${style.bgColor} ${style.color}`}>
               {article.platform}
             </span>
             <span class="text-[10px] text-[var(--text-muted)] font-mono">{article.date}</span>
           </div>
           
-          <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] group-hover:text-blue-500 transition-colors leading-snug">
+          <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] group-hover:text-[var(--accent-strong)] transition-colors leading-snug">
             {article.title}
           </h3>
         </a>
       );
     })}
   </div>
-</section>
+</div>

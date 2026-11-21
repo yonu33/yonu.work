@@ -1,32 +1,32 @@
 ---
 import { profile } from '../data/profile.js';
+import githubSvg from '../assets/icons/github.svg?raw';
+import xSvg from '../assets/icons/x.svg?raw';
+import qiitaSvg from '../assets/icons/qiita.svg?raw';
+import zennSvg from '../assets/icons/zenn.svg?raw';
+import noteSvg from '../assets/icons/note.svg?raw';
+import discordSvg from '../assets/icons/discord.svg?raw';
 ---
 
-<header class="ticket-surface flex flex-col md:flex-row items-center md:items-stretch gap-6 p-5 md:p-6 mb-10 md:mb-12">
-  <div class="ticket-perforation flex flex-col items-center justify-center gap-2 pr-6">
-    <img
-      src={profile.avatar}
-      alt={`${profile.name}のアイコン`}
-      class="pixel-avatar transition-transform duration-300 hover:scale-105"
-    />
-    <span class="ticket-label">PASSENGER</span>
-  </div>
-
-  <div class="flex-1 text-center md:text-left">
-    <div class="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-1 mb-3">
-      <span class="ticket-label">FROM: UOA</span>
-      <span class="ticket-label">TO: THE WEB</span>
-      <span class="ticket-label">ID: YONU33</span>
-      <span class="ticket-label">EST. 2025.11.01</span>
+<header class="ticket-hero mb-12 md:mb-16">
+  <div class="ticket-main">
+    <div class="ticket-photo">
+      <span>旅好きな学生エンジニア</span>
+      <img src={profile.avatar} alt={`${profile.name}のアイコン`} />
     </div>
-    <h1 class="text-3xl md:text-5xl font-bold tracking-tight text-[var(--text-main)] mb-3">
-      {profile.name}
-    </h1>
-    <p class="text-base md:text-lg font-medium text-[var(--text-muted)] leading-relaxed">
-      {profile.bio}
-    </p>
-    <p class="text-xs md:text-sm font-medium text-[var(--accent-strong)] mt-3 tracking-wide">
-      {profile.role}
-    </p>
+    <div class="ticket-name">
+      <p class="ticket-meta-line">FROM: SENDAI / TO: AIZU / ID: YONU33 / ISSUE: 2025.11.01</p>
+      <h1>yonu</h1>
+      <p class="ticket-bio">{profile.bio}</p>
+      <p class="ticket-role">{profile.role}</p>
+    </div>
   </div>
+  <nav class="ticket-socials" aria-label="SNSリンク">
+    <a href="https://github.com/yonu33" target="_blank" rel="noopener noreferrer" title="GitHub" aria-label="GitHub"><Fragment set:html={githubSvg} /></a>
+    <a href="https://x.com/i/user/1898003250068262912" target="_blank" rel="noopener noreferrer" title="X" aria-label="X"><Fragment set:html={xSvg} /></a>
+    <a href="https://qiita.com/yonu" target="_blank" rel="noopener noreferrer" title="Qiita" aria-label="Qiita"><Fragment set:html={qiitaSvg} /></a>
+    <a href="https://zenn.dev/yonu" target="_blank" rel="noopener noreferrer" title="Zenn" aria-label="Zenn"><Fragment set:html={zennSvg} /></a>
+    <a href="https://note.com/yonu33" target="_blank" rel="noopener noreferrer" title="note" aria-label="note"><Fragment set:html={noteSvg} /></a>
+    <a href="https://discord.com/invite/9ZCgqNzqF7" target="_blank" rel="noopener noreferrer" title="Discord" aria-label="Discord"><Fragment set:html={discordSvg} /></a>
+  </nav>
 </header>

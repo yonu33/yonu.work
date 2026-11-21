@@ -1,8 +1,53 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@media print {
+  nav,
+  button,
+  #links,
+  #links + section {
+    display: none !important;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      background-image:
+        linear-gradient(90deg, transparent 0 49.9%, color-mix(in srgb, var(--scene-accent) 5%, transparent) 50%, transparent 50.1%),
+        linear-gradient(0deg, transparent 0 79.9%, color-mix(in srgb, var(--scene-accent) 4%, transparent) 80%, transparent 80.1%);
+    }
+
+    .retro-panel {
+      box-shadow: 5px 5px 0 color-mix(in srgb, var(--scene-accent) 12%, transparent);
+    }
+
+    .retro-panel:hover {
+      border-color: var(--scene-accent);
+    }
+  }
+
+  body,
+  :root {
+    background: #fff !important;
+  }
+
+  main {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .retro-panel {
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+
+  section {
+    break-inside: avoid;
+  }
+}
 
 @layer base {
   :root {
@@ -15,6 +60,8 @@
     --accent-strong: #0645ad;
     --accent-cool: #176f9f;
     --shadow-color: #8aa3bb;
+    --scene-bg: #dfeaf5;
+    --scene-accent: #0645ad;
   }
 
   :root.dark {
@@ -27,20 +74,38 @@
     --accent-strong: #8bc7ff;
     --accent-cool: #71d7e8;
     --shadow-color: #07101a;
+    --scene-bg: #172638;
+    --scene-accent: #71d7e8;
   }
+
+  /* セクションごとに変わるのはアクセント色だけ（背景色は固定） */
+  :root[data-scene="passport"] { --scene-accent: #0645ad; }
+  :root[data-scene="train"] { --scene-accent: #2f6652; }
+  :root[data-scene="plane"] { --scene-accent: #176f9f; }
+  :root[data-scene="bus"] { --scene-accent: #8a6545; }
+  :root[data-scene="articles"] { --scene-accent: #705a84; }
+  :root[data-scene="links"] { --scene-accent: #36736b; }
+
+  :root.dark[data-scene="passport"] { --scene-accent: #8bc7ff; }
+  :root.dark[data-scene="train"] { --scene-accent: #86baa2; }
+  :root.dark[data-scene="plane"] { --scene-accent: #71d7e8; }
+  :root.dark[data-scene="bus"] { --scene-accent: #d1ad82; }
+  :root.dark[data-scene="articles"] { --scene-accent: #b69acf; }
+  :root.dark[data-scene="links"] { --scene-accent: #82bfb5; }
 
   html {
     background: var(--bg-page);
   }
 
   body {
-    background-color: var(--bg-page);
+    background-color: var(--scene-bg);
     background-image:
       linear-gradient(90deg, rgba(89, 113, 137, 0.06) 1px, transparent 1px),
       linear-gradient(#f8fbff 0, var(--bg-page) 180px);
     background-size: 32px 32px, auto;
     font-family: "Noto Sans JP", sans-serif;
     font-weight: 500;
+    transition: background-color 900ms cubic-bezier(.22, 1, .36, 1);
   }
 
   :root.dark body {
@@ -52,12 +117,157 @@
 }
 
 @layer components {
-  .card-surface {
-    @apply bg-[var(--bg-card)] border border-[var(--border-color)] shadow-sm rounded-none transition-all duration-300;
+  main {
+    position: relative;
+    z-index: 10;
   }
 
-  .card-surface:hover {
-    border-color: var(--accent-strong);
+  .side-route {
+    display: none;
+  }
+
+  @media (min-width: 1280px) {
+
+    /* 幅は本文（max-w-5xl = 64rem）の外側の余白に収まるように計算する */
+    .side-route {
+      position: fixed;
+      top: 50%;
+      z-index: 2;
+      width: max(96px, min(170px, calc((100vw - 64rem) / 2 - 36px)));
+      display: flex;
+      flex-direction: column;
+      color: var(--scene-accent);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      opacity: 0.58;
+      transform: translateY(-50%);
+      transition: opacity 600ms ease, transform 800ms cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .side-route:hover,
+    .side-route:focus-visible {
+      opacity: 1;
+    }
+
+    /* 目次に統合したので、右端の固定ナビは出さない */
+    .section-dock {
+      display: none !important;
+    }
+
+    .side-left {
+      left: 18px;
+      align-items: flex-start;
+    }
+
+    .side-right {
+      right: 18px;
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .side-arrow {
+      height: 30px;
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+
+    .side-route strong {
+      max-width: 100%;
+      padding: 0.28rem 0.45rem;
+      border: 1px solid currentColor;
+      background: color-mix(in srgb, var(--scene-bg) 88%, transparent);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+    }
+
+    .side-route > span:not(.side-arrow):not(.side-line) {
+      margin-top: 0.42rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+    }
+
+    .side-line {
+      width: 100%;
+      height: 1px;
+      margin-top: 0.75rem;
+      background: repeating-linear-gradient(90deg, currentColor 0 5px, transparent 5px 11px);
+    }
+
+    /* 左サイドの目次 */
+    .side-toc {
+      opacity: 0.85;
+    }
+
+    .side-toc-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .side-toc-list a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      transition: color 200ms ease;
+    }
+
+    .side-toc-list a:hover,
+    .side-toc-list a[aria-current] {
+      color: var(--scene-accent);
+    }
+
+    .side-toc-marker {
+      width: 7px;
+      height: 7px;
+      flex: none;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+    }
+
+    .side-toc-list a[aria-current] .side-toc-marker {
+      background: currentColor;
+    }
+
+    .side-toc-list a[aria-current] .side-toc-marker + span {
+      padding: 0.1rem 0.35rem;
+      border: 1px solid currentColor;
+      background: color-mix(in srgb, var(--scene-bg) 88%, transparent);
+    }
+
+    .side-toc .side-line {
+      margin-top: 0.75rem;
+    }
+
+    :root[data-scene="train"] .side-left,
+    :root[data-scene="bus"] .side-left {
+      transform: translateY(-50%) translateX(8px);
+    }
+
+    :root[data-scene="plane"] .side-right,
+    :root[data-scene="links"] .side-right {
+      transform: translateY(-50%) translateX(-8px);
+    }
+  }
+
+  .travel-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .scene-sky {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 78% 18%, color-mix(in srgb, var(--scene-accent) 12%, transparent) 0 3px, transparent 4px),
+      radial-gradient(circle at 18% 72%, color-mix(in srgb, var(--scene-accent) 8%, transparent) 0 2px, transparent 3px),
+      linear-gradient(120deg, transparent 70%, color-mix(in srgb, var(--scene-accent) 4%, transparent));
+    background-size: 70px 70px, 95px 95px, 100% 100%;
   }
 
   a {
@@ -71,97 +281,718 @@
   .retro-panel {
     border: 1px solid var(--border-color);
     background: var(--bg-card);
-    box-shadow: 2px 2px 0 rgba(78, 108, 136, 0.22);
+    box-shadow: none;
   }
 
-  .ticket-surface {
+  .mars-timetable {
+    background-image: repeating-linear-gradient(0deg, transparent 0 39px, color-mix(in srgb, var(--border-color) 55%, transparent) 39px 40px);
+  }
+
+  .marsu-row {
     position: relative;
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
   }
 
-  .ticket-surface::before,
-  .ticket-surface::after {
-    position: absolute;
-    top: 50%;
-    width: 28px;
-    height: 28px;
-    border: 1px solid var(--border-color);
+  .mars-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 0.55rem;
+    border: 1px solid var(--accent-cool);
     border-radius: 50%;
-    background: var(--bg-page);
-    content: "";
-    pointer-events: none;
-    transform: translateY(-50%);
-    z-index: 1;
   }
 
-  .ticket-surface::before {
-    left: -15px;
-    clip-path: inset(0 0 0 50%);
-  }
-
-  .ticket-surface::after {
-    right: -15px;
-    clip-path: inset(0 50% 0 0);
-  }
-
-  .ticket-perforation {
-    border-right: 1px dashed var(--border-color);
-  }
-
-  .ticket-label,
-  .ticket-meta {
+  .ticket-label {
     color: var(--text-muted);
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.65rem;
     letter-spacing: 0.1em;
   }
 
-  .ticket-meta {
+  .travel-scene {
+    display: none;
+  }
+
+  body {
+    background-image:
+      linear-gradient(rgba(40, 72, 58, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(40, 72, 58, 0.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .section-dock {
+    position: fixed;
+    z-index: 40;
+    display: flex;
+  }
+
+  .section-dock a[aria-current] {
+    color: var(--accent-strong);
+  }
+
+  .section-dock a[aria-current] strong {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  .section-dock span {
+    font-size: 1rem;
+  }
+
+  .section-dock strong {
+    font-size: 1.05rem;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  .journey-card h3 {
+    font-size: 1.35rem;
+  }
+
+  .journey-card p,
+  .mars-timetable,
+  #project-popover-description {
+    font-size: 1rem;
+  }
+
+  .journey-card dt,
+  .journey-card-head,
+  .project-toggle,
+  .retro-label,
+  .section-title p {
+    font-size: .72rem;
+  }
+
+  @media (min-width: 1280px) {
+    .section-dock {
+      right: 32px;
+      top: 50%;
+      width: 184px;
+      flex-direction: column;
+      transform: translateY(-50%);
+      border: 1px solid var(--border-color);
+      background: color-mix(in srgb, var(--bg-card) 94%, transparent);
+      box-shadow: none;
+    }
+
+    .section-dock a {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      align-items: center;
+      gap: .45rem;
+      min-height: 64px;
+      padding: 0 .95rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-dock a:last-child {
+      border-bottom: 0;
+    }
+
+    .section-dock span {
+      color: var(--text-muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 1.35rem;
+    }
+
+    .section-dock strong {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 1279px) {
+    .section-dock {
+      left: 50%;
+      bottom: 10px;
+      width: min(calc(100% - 20px), 460px);
+      min-height: 54px;
+      transform: translateX(-50%);
+      justify-content: space-around;
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      background: color-mix(in srgb, var(--bg-card) 96%, transparent);
+      box-shadow: 0 8px 28px rgba(27, 47, 72, .16);
+      backdrop-filter: blur(12px);
+    }
+
+    .section-dock a {
+      min-width: 54px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+
+    .section-dock span {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 1.05rem;
+    }
+
+    .section-dock strong {
+      margin-top: .1rem;
+      font-size: .58rem;
+    }
+  }
+
+  .section-title {
+    display: flex;
+    align-items: stretch;
+    min-height: 58px;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .section-title > span {
+    width: 74px;
+    flex: 0 0 74px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: var(--accent-strong);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 1.25rem;
+  }
+
+  .section-title > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: .65rem 1rem;
+  }
+
+  .section-title p {
+    margin: 0 0 .15rem;
+    color: var(--accent-cool);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .55rem;
+    letter-spacing: .15em;
+  }
+
+  .section-title h2 {
+    margin: 0;
+    font-family: "Shippori Mincho", "Yu Mincho", serif;
+    font-size: clamp(1.35rem, 3vw, 2rem);
+  }
+
+  .journey-card {
+    border-radius: 0;
+    cursor: pointer;
+    min-height: 176px;
+  }
+
+  .journey-card:focus-visible {
+    outline: 2px solid var(--accent-strong);
+    outline-offset: 4px;
+  }
+
+  body.project-detail-open {
+    overflow: hidden;
+  }
+
+  .project-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 89;
+    background: rgba(13, 25, 32, .58);
+    backdrop-filter: blur(3px);
+    pointer-events: auto;
+  }
+
+  .project-backdrop.hidden {
+    display: none;
+  }
+
+  .project-popover {
+    position: fixed;
+    z-index: 90;
+    left: 50%;
+    top: 50%;
+    width: min(600px, calc(100vw - 32px));
+    max-height: calc(100vh - 64px);
+    transform: translate(-50%, -50%);
+    overflow-y: auto;
+    margin: 0;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    box-shadow: none;
+  }
+
+  .project-popover.hidden {
+    display: none;
+  }
+
+  .project-popover-head {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 .75rem 0 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .72rem;
+  }
+
+  .project-popover-head button {
+    width: 38px;
+    height: 38px;
+    border: 0;
+    color: var(--text-main);
+    background: transparent;
+    font-size: 1.5rem;
+  }
+
+  .project-popover h2 {
+    margin: 0;
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1.65rem;
+  }
+
+  #project-popover-description {
+    margin: 0;
+    padding: 1.25rem;
+    font-size: 1rem;
+    line-height: 1.9;
+  }
+
+  .project-popover-stack {
+    display: grid;
+    margin: 0 1.25rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .project-popover-stack div {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .project-popover-stack dt,
+  .project-popover-stack dd {
+    margin: 0;
+    padding: .75rem;
+  }
+
+  .project-popover-stack dt {
+    border-right: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: .68rem;
+  }
+
+  .project-popover-stack dd {
+    font-size: .9rem;
+  }
+
+  .project-popover-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem 1.25rem;
-    padding-top: 0.75rem;
-    border-top: 1px dashed var(--border-color);
+    gap: .75rem;
+    padding: 1.25rem;
   }
 
-  .ticket-status {
-    color: var(--accent-cool);
+  .project-popover-links a {
+    border: 1px solid var(--border-color);
+    padding: .65rem .8rem;
+    font-size: .82rem;
+    font-weight: 700;
   }
 
-  .ticket-status i {
-    display: inline-block;
-    width: 0.45rem;
-    height: 0.45rem;
-    margin-right: 0.35rem;
-    border-radius: 9999px;
-    background: currentColor;
-    animation: ticket-pulse 1.5s ease-in-out infinite;
+  .journey-card h3,
+  .project-popover h2 {
+    font-size: 1.25rem;
   }
 
-  @keyframes ticket-pulse {
-    50% { opacity: 0.35; }
+  .journey-card p,
+  .journey-card dd,
+  .mars-timetable,
+  #project-popover-description,
+  .project-popover-stack dd {
+    font-size: .95rem;
   }
 
-  .retro-heading {
-    border-left: 5px solid var(--accent-strong);
+  .journey-card dt,
+  .journey-card-head,
+  .project-toggle,
+  .ticket-label,
+  .section-title p,
+  .retro-label {
+    font-size: .68rem;
+  }
+
+  .journey-card-head {
     border-bottom: 1px solid var(--border-color);
-    padding: 0.45rem 0.7rem;
-    background: linear-gradient(90deg, rgba(222, 237, 250, 0.9), transparent);
+    color: var(--text-muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .58rem;
   }
 
-  .pixel-avatar {
-    width: 112px;
-    height: 112px;
+  .mars-timetable {
+    background-image: none;
+  }
+
+  .resume-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, .9fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .resume-sheet {
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+  }
+
+  .resume-left {
+    min-width: 0;
+  }
+
+  .github-contributions {
+    display: block;
+    margin-top: 1rem;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+  }
+
+  .github-contributions-head {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 .75rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .github-contributions-head span {
+    color: var(--text-muted);
+    font-size: .58rem;
+  }
+
+  .github-contributions-head strong {
+    color: var(--accent-strong);
+    font-size: .68rem;
+  }
+
+  .github-contributions img {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: .65rem;
+  }
+
+  /* ダークモードでは草の表の明暗を反転して、暗い背景になじませる（色相は保つ） */
+  :root.dark .github-contributions img {
+    filter: invert(0.88) hue-rotate(180deg);
+  }
+
+  .resume-row {
+    min-height: 38px;
+  }
+
+  .ticket-hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 960px;
+    margin-right: auto;
+    margin-left: auto;
+    min-height: 220px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    box-shadow: none;
+  }
+
+  .ticket-hero::before,
+  .ticket-hero::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--scene-bg);
+    transform: translateY(-50%);
+  }
+
+  .ticket-hero::before {
+    left: -22px;
+    clip-path: inset(0 0 0 50%);
+  }
+
+  .ticket-hero::after {
+    right: -22px;
+    clip-path: inset(0 50% 0 0);
+  }
+
+  .ticket-main {
+    display: grid;
+    grid-template-columns: 170px minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .ticket-photo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .55rem;
+    border-right: 1px dashed var(--border-color);
+  }
+
+  .ticket-photo span {
+    color: var(--text-muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .48rem;
+    letter-spacing: .12em;
+  }
+
+  .ticket-photo img {
+    width: 118px;
+    height: 118px;
     object-fit: cover;
-    image-rendering: pixelated;
+    border: 0;
+    outline: 0;
+  }
+
+  .ticket-name {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    padding: 1.5rem;
+  }
+
+  .ticket-name > p:first-child {
+    margin: 0 0 .35rem;
+    color: var(--accent-cool);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .82rem;
+    letter-spacing: .15em;
+  }
+
+  .ticket-bio {
+    font-size: 1.1rem;
+  }
+
+  .ticket-role {
+    font-size: .78rem;
+  }
+
+  .ticket-meta-line {
+    padding-bottom: .55rem;
+    border-bottom: 1px dashed var(--border-color);
+  }
+
+  .ticket-name h1 {
+    margin: 0;
+    font-family: "Shippori Mincho", "Yu Mincho", serif;
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    line-height: .9;
+  }
+
+  .ticket-socials {
+    position: absolute;
+    left: 170px;
+    right: 1.25rem;
+    bottom: .75rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: .45rem;
+  }
+
+  .ticket-socials a {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    background: var(--bg-card);
+  }
+
+  .ticket-socials a svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+
+  .ticket-socials {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: .35rem;
+  }
+
+  .ticket-socials a {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border-color);
+    padding: .42rem;
+    color: var(--accent-strong);
+    background: var(--bg-card);
+  }
+
+  .ticket-socials a svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+  }
+
+  .ticket-bio {
+    margin: 1rem 0 0;
+    color: var(--text-main);
+    font-size: .82rem;
+    line-height: 1.7;
+  }
+
+  .ticket-role {
+    margin: .45rem 0 0;
+    color: var(--accent-strong);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .55rem;
+  }
+
+  @media (max-width: 767px) {
+    .project-popover {
+      left: 50%;
+      top: 50%;
+      width: calc(100vw - 16px);
+      max-height: calc(100vh - 32px);
+    }
+    .ticket-hero {
+      grid-template-columns: 1fr;
+      min-height: 0;
+      box-shadow: 4px 4px 0 color-mix(in srgb, var(--accent-strong) 10%, transparent);
+    }
+
+    .ticket-main {
+      grid-template-columns: 105px minmax(0, 1fr);
+    }
+
+    .ticket-photo {
+      border-right: 1px dashed var(--border-color);
+    }
+
+    .ticket-photo img {
+      width: 82px;
+      height: 82px;
+      border-width: 4px;
+    }
+
+    .ticket-name {
+      padding: 1.1rem .85rem;
+    }
+
+    .ticket-name h1 {
+      font-size: 2.8rem;
+    }
+
+    /* 発券情報（FROM / TO / ID / ISSUE）はスマホでは小さく */
+    .ticket-name > p.ticket-meta-line {
+      font-size: .58rem;
+      line-height: 1.6;
+      letter-spacing: .04em;
+    }
+
+    /* スマホではアイコン列を重ねずに、チケットの下段に並べる */
+    .ticket-socials {
+      position: static;
+      justify-content: flex-start;
+      gap: .35rem;
+      padding: .7rem .85rem;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .ticket-socials a {
+      width: 30px;
+      height: 30px;
+      padding: .4rem;
+    }
+
+    /* 切符の切り欠きは小さくして、アイコン列の上の点線（ミシン目）の位置に置く。
+       bottom = アイコン列の高さ（アイコン30px + 上下padding .7rem×2 + 点線1px） */
+    .ticket-hero::before,
+    .ticket-hero::after {
+      top: auto;
+      bottom: calc(30px + 1.4rem + 1px);
+      width: 24px;
+      height: 24px;
+      transform: translateY(50%);
+    }
+
+    .ticket-hero::before {
+      left: -12px;
+    }
+
+    .ticket-hero::after {
+      right: -12px;
+    }
+
+    .ticket-bio {
+      font-size: .68rem;
+    }
+
+    .ticket-role {
+      font-size: .48rem;
+      line-height: 1.5;
+    }
+
+    .resume-grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .section-title {
+      min-height: 64px;
+    }
+
+    .section-title > span {
+      width: 58px;
+      flex-basis: 58px;
+    }
+
+    .section-title h2 {
+      font-size: 1.25rem;
+    }
+
+    .journey-card-head {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
   }
 
   .site-pixel-icon {
     width: 24px;
     height: 24px;
     image-rendering: pixelated;
-    border: 1px solid var(--border-color);
+    border: 0;
+  }
+
+  @media (max-width: 767px) {
+
+    /* スマホでは日付を本文の上に置く */
+    .marsu-row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.15rem;
+    }
+
+    .marsu-row time,
+    .marsu-row a,
+    .marsu-row > span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .mars-timetable {
+      background-image: none;
+    }
   }
 }
 
@@ -171,10 +1002,9 @@
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     letter-spacing: 0.16em;
   }
+}
 
-  .retro-accent {
-    background: var(--accent);
-    color: var(--text-main);
-    border: 1px solid #c4b95d;
-  }
+body,
+body * {
+  font-family: "DotGothic16", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif !important;
 }

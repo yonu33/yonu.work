@@ -1,24 +1,357 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
-import SocialIcons from '../components/SocialIcons.astro';
 import Articles from '../components/Articles.astro';
 import MutualLinks from '../components/MutualLinks.astro';
 import Footer from '../components/Footer.astro';
+import { profile } from '../data/profile.js';
+import { projects } from '../data/projects.js';
+import { history } from '../data/history.js';
 ---
 
 <Layout title="Top">
-  <main class="max-w-3xl mx-auto py-16 px-6">
-    
+  <div id="top" data-scroll-scene="passport" class="py-10">
     <Hero />
 
-    <SocialIcons />
+    <section id="profile" data-scroll-scene="train" class="mb-16 md:mb-20 scroll-mt-24">
+      <div class="section-title mb-6">
+        <span>01</span>
+        <div>
+          <p>BASE PROFILE</p>
+          <h2>自分について</h2>
+        </div>
+      </div>
+      <div class="resume-grid">
+        <div class="resume-left">
+          <dl class="resume-sheet divide-y divide-[var(--border-color)]">
+            {profile.personal.map(item => (
+              <div class="resume-row grid grid-cols-[5.5rem_1fr] gap-3 px-4 py-2">
+                <dt class="retro-label text-[10px] font-bold uppercase">{item.label}</dt>
+                <dd class="text-sm leading-relaxed text-[var(--text-main)]">{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <a
+            href="https://github.com/yonu33"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="github-contributions"
+            aria-label="GitHub contributions"
+          >
+            <div class="github-contributions-head">
+              <span>GitHub</span>
+              <strong>Contributions</strong>
+            </div>
+            <img
+              src="https://ghchart.rshah.org/4b72a1/yonu33"
+              alt="yonu33 の GitHub コントリビューション"
+              loading="lazy"
+            />
+          </a>
+        </div>
+        <div>
+          <h3 class="retro-label text-[10px] font-bold mb-3">Technical Stack</h3>
+          <dl class="space-y-2">
+            {profile.tech.map(item => (
+              <div class="retro-panel px-4 py-2">
+                <dt class="text-xs font-black text-[var(--accent-strong)] mb-1">{item.cat}</dt>
+                <dd class="text-sm text-[var(--text-muted)] leading-relaxed">{item.details}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </section>
 
-    <Articles />
+    <section id="projects" data-scroll-scene="plane" class="mb-16 md:mb-20 scroll-mt-24">
+      <div class="section-title mb-6">
+        <span>02</span>
+        <div>
+          <p>BUILD LOG</p>
+          <h2>作ったもの</h2>
+        </div>
+      </div>
+      <div class="grid items-stretch gap-4 md:grid-cols-2">
+        {projects.map((project, index) => (
+          <article
+            id={project.id}
+            class="journey-card retro-panel p-0 flex flex-col"
+            data-project-card
+            tabindex="0"
+            role="button"
+            aria-expanded="false"
+            data-project-title={project.title}
+            data-project-description={project.description}
+            data-project-period={project.period}
+            data-project-stack={JSON.stringify(project.stack)}
+            data-project-github={project.github}
+            data-project-article={project.article || ''}
+          >
+            <div class="journey-card-head px-5 py-3 flex items-center justify-between">
+              <span>LOG / {String(index + 1).padStart(2, '0')}</span>
+              <span>{project.period}</span>
+            </div>
+            <div class="p-5 flex flex-col flex-1">
+              <h3 class="mb-3 font-black text-lg text-[var(--text-main)]">{project.title}</h3>
+              <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">{project.summary}</p>
+              <span class="project-toggle mt-auto pt-4 text-xs font-bold text-[var(--accent-strong)]">詳細を開く +</span>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+
+    <section id="history" data-scroll-scene="bus" class="mb-16 md:mb-20 scroll-mt-24">
+      <div class="section-title mb-6">
+        <span>03</span>
+        <div>
+          <p>EVENT & JOURNEY</p>
+          <h2>これまでの記録</h2>
+        </div>
+      </div>
+      <div class="mars-timetable retro-panel divide-y divide-[var(--border-color)]">
+        {history.slice().reverse().map((item, index) => (
+          <div
+            class={`marsu-row grid gap-1 px-4 py-3 md:grid-cols-[9.5rem_1fr] md:gap-4 ${index >= 7 ? 'history-extra hidden' : ''}`}
+          >
+            <time class="ticket-label pt-0.5"><span class="mars-dot"></span>{item.date}</time>
+            {item.href ? (
+              <a href={item.href} target="_blank" rel="noopener noreferrer" class="text-sm leading-relaxed hover:underline">
+                {item.text}
+              </a>
+            ) : (
+              <span class="text-sm leading-relaxed">{item.text}</span>
+            )}
+          </div>
+        ))}
+      </div>
+      {history.length > 7 && (
+        <button
+          id="history-toggle"
+          type="button"
+          class="mt-4 border border-[var(--border-color)] px-4 py-2 text-xs font-bold text-[var(--accent-strong)] hover:border-[var(--accent-strong)] transition-colors"
+          aria-expanded="false"
+        >
+          過去の履歴をすべて表示 ({history.length}件)
+        </button>
+      )}
+      <script is:inline>
+        const historyToggle = document.getElementById('history-toggle');
+        if (historyToggle) {
+          historyToggle.addEventListener('click', () => {
+            const extraItems = document.querySelectorAll('.history-extra');
+            const expanded = historyToggle.getAttribute('aria-expanded') === 'true';
+
+            extraItems.forEach(item => item.classList.toggle('hidden', expanded));
+            historyToggle.setAttribute('aria-expanded', String(!expanded));
+            historyToggle.textContent = expanded
+              ? `過去の履歴をすべて表示 (${extraItems.length + 7}件)`
+              : '履歴を折りたたむ';
+          });
+        }
+      </script>
+    </section>
+
+    <div id="articles" data-scroll-scene="articles" class="article-sign-wrap mb-16 md:mb-20 scroll-mt-24">
+      <div class="section-title mb-6">
+        <span>04</span>
+        <div>
+          <p>FIELD NOTES</p>
+          <h2>記事・発信</h2>
+        </div>
+      </div>
+      <Articles />
+    </div>
+
+    <section id="links" data-scroll-scene="links" class="mb-16 md:mb-20 scroll-mt-24">
+      <div class="section-title mb-6">
+        <span>05</span>
+        <div>
+          <p>CONNECTION</p>
+          <h2>つながり・連絡先</h2>
+        </div>
+      </div>
+      <div class="grid gap-3 md:grid-cols-2">
+        {profile.contacts.map(contact => (
+          contact.href ? (
+            <a href={contact.href} target="_blank" rel="noopener noreferrer" class="retro-panel flex items-center justify-between px-4 py-3 hover:border-[var(--accent-strong)]">
+              <span class="retro-label text-[10px]">{contact.label}</span>
+              <span class="text-sm font-bold">{contact.val}</span>
+            </a>
+          ) : (
+            <div class="retro-panel flex items-center justify-between px-4 py-3">
+              <span class="retro-label text-[10px]">{contact.label}</span>
+              <span class="text-sm font-bold">{contact.val}</span>
+            </div>
+          )
+        ))}
+      </div>
+    </section>
 
     <MutualLinks />
 
     <Footer />
+  </div>
+  <div id="project-backdrop" class="project-backdrop hidden" aria-hidden="true"></div>
+  <aside id="project-popover" class="project-popover hidden" role="dialog" aria-modal="true" aria-labelledby="project-popover-title">
+      <div class="project-popover-head">
+        <span id="project-popover-period"></span>
+        <button type="button" data-popover-close aria-label="閉じる">×</button>
+      </div>
+      <h2 id="project-popover-title"></h2>
+      <p id="project-popover-description"></p>
+      <dl id="project-popover-stack" class="project-popover-stack"></dl>
+      <div id="project-popover-links" class="project-popover-links"></div>
+  </aside>
+  <script is:inline>
+    // プロジェクト詳細：カードの data-project-* 属性から中身を作って開く。
+    // クリック / Enter / Space で開き、× ボタン / Esc / 背景クリックで閉じる。閉じたら元のカードにフォーカスを戻す。
+    (() => {
+      const popover = document.getElementById('project-popover');
+      const backdrop = document.getElementById('project-backdrop');
+      if (!popover || !backdrop) return;
+      const field = id => popover.querySelector(`#project-popover-${id}`);
+      let openedFrom = null;
 
-  </main>
+      const externalLink = (href, text) => Object.assign(document.createElement('a'), {
+        href, textContent: text, target: '_blank', rel: 'noopener noreferrer'
+      });
+
+      const open = card => {
+        const d = card.dataset;
+        field('title').textContent = d.projectTitle;
+        field('period').textContent = d.projectPeriod;
+        field('description').textContent = d.projectDescription;
+        field('stack').replaceChildren(...Object.entries(JSON.parse(d.projectStack || '{}')).map(([category, value]) => {
+          const row = document.createElement('div');
+          row.append(
+            Object.assign(document.createElement('dt'), { textContent: category }),
+            Object.assign(document.createElement('dd'), { textContent: value })
+          );
+          return row;
+        }));
+        const links = [];
+        if (d.projectArticle) links.push(externalLink(d.projectArticle, '解説記事 →'));
+        if (d.projectGithub && d.projectGithub !== '非公開') links.push(externalLink(d.projectGithub, 'GitHub →'));
+        field('links').replaceChildren(...links);
+
+        popover.classList.remove('hidden');
+        backdrop.classList.remove('hidden');
+        document.body.classList.add('project-detail-open');
+        card.setAttribute('aria-expanded', 'true');
+        openedFrom = card;
+        popover.querySelector('[data-popover-close]').focus();
+      };
+
+      const close = () => {
+        if (popover.classList.contains('hidden')) return;
+        popover.classList.add('hidden');
+        backdrop.classList.add('hidden');
+        document.body.classList.remove('project-detail-open');
+        openedFrom?.setAttribute('aria-expanded', 'false');
+        openedFrom?.focus();
+        openedFrom = null;
+      };
+
+      document.querySelectorAll('[data-project-card]').forEach(card => {
+        card.addEventListener('click', () => open(card));
+        card.addEventListener('keydown', event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            open(card);
+          }
+        });
+      });
+      popover.querySelector('[data-popover-close]').addEventListener('click', close);
+      backdrop.addEventListener('click', close);
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') close();
+      });
+    })();
+
+    // 左右の目次に出すセクション（ページ上の並び順）。scene は data-scroll-scene の値
+    const tocSections = [
+      { scene: 'passport', id: 'top', name: 'TOP', title: 'トップ' },
+      { scene: 'train', id: 'profile', name: 'PROFILE', title: '自分について' },
+      { scene: 'plane', id: 'projects', name: 'PROJECTS', title: '作ったもの' },
+      { scene: 'bus', id: 'history', name: 'HISTORY', title: 'これまでの記録' },
+      { scene: 'articles', id: 'articles', name: 'ARTICLES', title: '記事・発信' },
+      { scene: 'links', id: 'links', name: 'LINKS', title: 'つながり・連絡先' }
+    ];
+    const tocLinks = document.querySelectorAll('[data-toc-id]');
+    const sceneRightLink = document.getElementById('scene-right-link');
+    const sceneRightMain = document.getElementById('scene-right-main');
+    const sceneRightSub = document.getElementById('scene-right-sub');
+    const sceneRightArrow = sceneRightLink?.querySelector('.side-arrow');
+
+    // 左＝目次の中で今いるセクションを強調、右＝次のセクション（最後まで来たら先頭へ戻るリンク）
+    const updateSideToc = (scene) => {
+      const index = tocSections.findIndex(section => section.scene === scene);
+      if (index < 0) return;
+      const current = tocSections[index];
+      const isLast = index === tocSections.length - 1;
+      const next = isLast ? { id: 'top', name: 'TOP', title: 'ページの先頭へ' } : tocSections[index + 1];
+      tocLinks.forEach(link => link.toggleAttribute('aria-current', link.dataset.tocId === current.id));
+      if (sceneRightLink) sceneRightLink.href = `/#${next.id}`;
+      if (sceneRightMain) sceneRightMain.textContent = next.name;
+      if (sceneRightSub) sceneRightSub.textContent = next.title;
+      if (sceneRightArrow) sceneRightArrow.textContent = isLast ? '↑' : '→';
+    };
+
+    const setScene = (scene) => {
+      document.documentElement.dataset.scene = scene;
+      const sceneTargets = {
+        passport: 'top',
+        train: 'profile',
+        plane: 'projects',
+        bus: 'history',
+        articles: 'articles',
+        links: 'links'
+      };
+      document.querySelectorAll('.section-dock a').forEach(link => {
+        const active = link.getAttribute('href')?.endsWith(`#${sceneTargets[scene]}`);
+        link.toggleAttribute('aria-current', Boolean(active));
+      });
+      updateSideToc(scene);
+    };
+
+    const updateCurrentSection = () => {
+      const sections = [
+        { id: 'profile', element: document.getElementById('profile') },
+        { id: 'projects', element: document.getElementById('projects') },
+        { id: 'history', element: document.getElementById('history') },
+        { id: 'articles', element: document.getElementById('articles') },
+        { id: 'links', element: document.getElementById('links') }
+      ];
+      const marker = window.innerHeight * 0.28;
+      let current = window.scrollY < 240 ? 'top' : 'profile';
+      sections.forEach(section => {
+        if (!section.element) return;
+        const rect = section.element.getBoundingClientRect();
+        if (rect.top <= marker) current = section.id;
+      });
+      const sceneById = {
+        top: 'passport',
+        profile: 'train',
+        projects: 'plane',
+        history: 'bus',
+        articles: 'articles',
+        links: 'links'
+      };
+      setScene(sceneById[current]);
+    };
+
+    let scrollFrame = 0;
+    const onScroll = () => {
+      if (scrollFrame) return;
+      scrollFrame = requestAnimationFrame(() => {
+        scrollFrame = 0;
+        updateCurrentSection();
+      });
+    };
+
+    updateCurrentSection();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  </script>
 </Layout>

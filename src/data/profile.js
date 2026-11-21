@@ -14,10 +14,10 @@ export const profile = {
     { label: "名前", value: "yonu" },
     { label: "生年月日", value: "2006年10月12日" },
     { label: "出身地", value: "宮城県仙台市" },
-    { label: "所属", value: "会津大学コンピュータ理工学部（2025年度入学・33期生）、GDGoC Aizu (Organizer)" },
-    { label: "サークル", value: "カンフー部、DMC、アニ研、Zli etc..." },
+    { label: "所属", value: "会津大学コンピュータ理工学部（2025年度入学・33期生）、GDGoC Aizu（Main Organizer）" },
+    { label: "サークル", value: "カンフー部、DMC、会津大学アニメ研究会、Zli 等" },
     { label: "趣味", value: "旅行、音楽、ラーメン" },
-    { label: "関心領域", value: "AI / LLM、Web開発、セキュリティ、電子工作"}
+    { label: "関心領域", value: "AI / LLM, Web開発, セキュリティ, 電子工作"}
   ],
   tech: [
     { cat: "Languages", details: "C, C#, Python, JavaScript, TypeScript" },
@@ -25,6 +25,6 @@ export const profile = {
     { cat: "Backend", details: ".NET, Python, JavaScript, TypeScript, Hono, GAS" },
     { cat: "Infrastructure", details: "Cloudflare Workers, Raspberry Pi" },
     { cat: "Tools", details: "Git, GitHub, MediaPipe, Discord API / Webhook" },
-    { cat: "Other", details: "韓国語（旅行に十分な程度）" }
+    { cat: "Other", details: "韓国語（旅行に十分な程度）, 危険物取扱者乙種4類" }
   ]
 };
