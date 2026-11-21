@@ -22,6 +22,14 @@ const getFavicon = (siteUrl) => {
   const domain = new URL(siteUrl).hostname;
   return `https://images.weserv.nl/?url=https://www.google.com/s2/favicons?domain=${domain}&sz=128&lbc=1`;
 };
+
+// 「このサイトへのリンク」に載せる情報
+const linkKit = [
+  { label: 'サイト名', value: 'yonu.work' },
+  { label: 'URL', value: 'https://yonu.work/' },
+  { label: 'アイコン', value: 'https://yonu.work/favicon.png' },
+  { label: '紹介文', value: '会津大学の学生エンジニア yonu のポートフォリオ' },
+];
 ---
 
 <section id="mutual-links" class="mb-16 md:mb-20 scroll-mt-24">
@@ -58,11 +66,47 @@ const getFavicon = (siteUrl) => {
           <h3 class="font-bold text-sm md:text-base text-[var(--text-main)] truncate group-hover:text-[var(--accent-strong)] transition-colors">
             {site.name}
           </h3>
-          <p class="text-[10px] text-[var(--text-muted)] font-mono truncate mt-0.5 opacity-80">
+          <p class="text-[10px] text-[var(--text-muted)] font-mono truncate mt-0.5">
             {site.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
           </p>
         </div>
       </a>
     ))}
   </div>
+
+  <!-- 相互リンクしてくれる人向けに、このサイトの情報をコピーできるようにする -->
+  <div class="retro-panel link-kit mt-6">
+    <div class="link-kit-head">
+      <img src="/favicon.png" alt="" width="40" height="40" />
+      <div>
+        <h3>このサイトへのリンク</h3>
+        <p>相互リンク歓迎です。下の情報をご自由にお使いください。</p>
+      </div>
+    </div>
+    <dl class="link-kit-rows">
+      {linkKit.map(row => (
+        <div>
+          <dt>{row.label}</dt>
+          <dd>
+            <code>{row.value}</code>
+            <button type="button" data-copy={row.value} aria-label={`${row.label}をコピー`}>コピー</button>
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
 </section>
+
+<script is:inline>
+  document.querySelectorAll('.link-kit [data-copy]').forEach(button => {
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy);
+        button.textContent = 'コピーしました';
+      } catch {
+        button.textContent = 'コピーできませんでした';
+      }
+      setTimeout(() => { button.textContent = 'コピー'; }, 1500);
+    });
+  });
+</script>

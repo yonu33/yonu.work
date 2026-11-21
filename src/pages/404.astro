@@ -1,0 +1,28 @@
+---
+// 存在しないページにアクセスされたときの表示（ビルドで dist/404.html になる）
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="404">
+  <div class="py-10">
+    <section class="ticket-hero invalid-ticket mb-12 md:mb-16" aria-labelledby="not-found-title">
+      <div class="ticket-main">
+        <div class="ticket-photo">
+          <span>NO BOARDING</span>
+          <img src="/favicon.png" alt="" width="118" height="118" />
+        </div>
+        <div class="ticket-name">
+          <p class="ticket-meta-line">FROM: ??? / TO: ??? / STATUS: 404 NOT FOUND</p>
+          <h1 id="not-found-title">404</h1>
+          <p class="ticket-bio">この切符は無効です。お探しのページは見つかりませんでした。</p>
+          <p class="ticket-role">ページは移動または削除された可能性があります。</p>
+          <a href="/" class="invalid-ticket-back">トップページへ戻る →</a>
+        </div>
+      </div>
+      <span class="invalid-ticket-stamp" aria-hidden="true">VOID</span>
+    </section>
+
+    <Footer />
+  </div>
+</Layout>

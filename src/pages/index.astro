@@ -7,6 +7,10 @@ import Footer from '../components/Footer.astro';
 import { profile } from '../data/profile.js';
 import { projects } from '../data/projects.js';
 import { history } from '../data/history.js';
+
+// これまでの記録：新しい順に並べ、最初の VISIBLE_HISTORY 件だけ表示する（残りは「すべて表示」で開く）
+const VISIBLE_HISTORY = 7;
+const historyRows = history.slice().reverse().map(item => ({ ...item, year: item.date.slice(0, 4) }));
 ---
 
 <Layout title="Top">
@@ -45,6 +49,8 @@ import { history } from '../data/history.js';
             <img
               src="https://ghchart.rshah.org/4b72a1/yonu33"
               alt="yonu33 の GitHub コントリビューション"
+              width="663"
+              height="104"
               loading="lazy"
             />
           </a>
@@ -73,7 +79,7 @@ import { history } from '../data/history.js';
       </div>
       <div class="grid items-stretch gap-4 md:grid-cols-2">
         {projects.map((project, index) => (
-          <article
+          <div
             id={project.id}
             class="journey-card retro-panel p-0 flex flex-col"
             data-project-card
@@ -101,7 +107,7 @@ import { history } from '../data/history.js';
               )}
               <span class="project-toggle mt-auto pt-4 text-xs font-bold text-[var(--accent-strong)]">詳細を開く +</span>
             </div>
-          </article>
+          </div>
         ))}
       </div>
     </section>
@@ -116,27 +122,36 @@ import { history } from '../data/history.js';
         </div>
       </div>
       <div class="mars-timetable retro-panel divide-y divide-[var(--border-color)]">
-        {history.slice().reverse().map((item, index) => (
-          <div
-            class={`marsu-row grid gap-1 px-4 py-3 md:grid-cols-[9.5rem_1fr] md:gap-4 ${index >= 7 ? 'history-extra hidden' : ''}`}
-          >
-            <time class="ticket-label pt-0.5"><span class="mars-dot"></span>{item.date}</time>
-            {item.href ? (
-              <a href={item.href} target="_blank" rel="noopener noreferrer" class="text-sm leading-relaxed hover:underline">
-                {item.text}
-              </a>
-            ) : (
-              <span class="text-sm leading-relaxed">{item.text}</span>
+        {historyRows.map((item, index) => (
+          <Fragment>
+            {/* 年が変わるところに見出しを入れる（その年の記録がすべて折りたたみ対象なら見出しも隠す） */}
+            {(index === 0 || historyRows[index - 1].year !== item.year) && (
+              <h3 class={`marsu-year px-4 py-1.5 ${index >= VISIBLE_HISTORY ? 'history-extra hidden' : ''}`}>
+                {item.year}
+              </h3>
             )}
-          </div>
+            <div
+              class={`marsu-row grid gap-1 px-4 py-3 md:grid-cols-[9.5rem_1fr] md:gap-4 ${index >= VISIBLE_HISTORY ? 'history-extra hidden' : ''}`}
+            >
+              <time class="ticket-label pt-0.5"><span class="mars-dot"></span>{item.date}</time>
+              {item.href ? (
+                <a href={item.href} target="_blank" rel="noopener noreferrer" class="text-sm leading-relaxed hover:underline">
+                  {item.text}
+                </a>
+              ) : (
+                <span class="text-sm leading-relaxed">{item.text}</span>
+              )}
+            </div>
+          </Fragment>
         ))}
       </div>
-      {history.length > 7 && (
+      {history.length > VISIBLE_HISTORY && (
         <button
           id="history-toggle"
           type="button"
           class="mt-4 border border-[var(--border-color)] px-4 py-2 text-xs font-bold text-[var(--accent-strong)] hover:border-[var(--accent-strong)] transition-colors"
           aria-expanded="false"
+          data-total={history.length}
         >
           過去の履歴をすべて表示 ({history.length}件)
         </button>
@@ -151,7 +166,7 @@ import { history } from '../data/history.js';
             extraItems.forEach(item => item.classList.toggle('hidden', expanded));
             historyToggle.setAttribute('aria-expanded', String(!expanded));
             historyToggle.textContent = expanded
-              ? `過去の履歴をすべて表示 (${extraItems.length + 7}件)`
+              ? `過去の履歴をすべて表示 (${historyToggle.dataset.total}件)`
               : '履歴を折りたたむ';
           });
         }

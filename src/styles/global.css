@@ -1023,9 +1023,158 @@ body * {
   padding: .1rem .5rem;
   border: 1px solid var(--border-color);
   background: var(--bg-page);
-  color: var(--text-muted);
+  color: var(--text-main);
   font-size: .72rem;
   line-height: 1.6;
+}
+
+/* ---------- これまでの記録：年の見出し ---------- */
+.marsu-year {
+  margin: 0;
+  background: color-mix(in srgb, var(--accent-strong) 7%, var(--bg-card));
+  color: var(--accent-strong);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+/* ---------- 相互リンク：このサイトへのリンク ---------- */
+.link-kit {
+  padding: 1rem 1.25rem;
+}
+
+.link-kit-head {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  margin-bottom: .75rem;
+}
+
+.link-kit-head img {
+  width: 40px;
+  height: 40px;
+  image-rendering: pixelated;
+}
+
+.link-kit-head h3 {
+  margin: 0;
+  font-size: .95rem;
+  font-weight: 700;
+}
+
+.link-kit-head p {
+  margin: .15rem 0 0;
+  color: var(--text-muted);
+  font-size: .78rem;
+}
+
+.link-kit-rows {
+  margin: 0;
+}
+
+.link-kit-rows div {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: .75rem;
+  padding: .45rem 0;
+  border-top: 1px dashed var(--border-color);
+}
+
+.link-kit-rows dt {
+  color: var(--text-muted);
+  font-size: .75rem;
+}
+
+/* 値とコピーボタンを横に並べる */
+.link-kit-rows dd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  margin: 0;
+  min-width: 0;
+  font-size: .82rem;
+}
+
+.link-kit-rows code {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.link-kit-rows button {
+  padding: .2rem .6rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--accent-strong);
+  font-size: .72rem;
+  white-space: nowrap;
+  transition: border-color 150ms ease;
+}
+
+.link-kit-rows button:hover {
+  border-color: var(--accent-strong);
+}
+
+@media (max-width: 479px) {
+  .link-kit-rows div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: .15rem;
+  }
+}
+
+/* ---------- 404ページ：無効になった切符 ---------- */
+.invalid-ticket-back {
+  display: inline-block;
+  align-self: flex-start;
+  width: fit-content;
+  margin-top: 1rem;
+  padding: .45rem .9rem;
+  border: 1px solid var(--accent-strong);
+  color: var(--accent-strong);
+  font-size: .85rem;
+  font-weight: 700;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.invalid-ticket-back:hover {
+  background: var(--accent-strong);
+  color: var(--bg-card);
+}
+
+.invalid-ticket-stamp {
+  position: absolute;
+  right: 1.5rem;
+  top: 1.25rem;
+  padding: .2rem .8rem;
+  border: 3px double #c8402f;
+  color: #c8402f;
+  font-size: 1.6rem;
+  letter-spacing: .2em;
+  opacity: .75;
+  transform: rotate(-12deg);
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  /* 404 の切符にはアイコン列がないので、切り欠きは縦の中央に置く */
+  .invalid-ticket::before,
+  .invalid-ticket::after {
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+  }
+
+  .invalid-ticket-stamp {
+    right: .75rem;
+    top: .75rem;
+    font-size: 1.1rem;
+  }
+
+  /* スタンプと重ならないよう、発券情報の行の右側を空ける */
+  .invalid-ticket .ticket-name > p.ticket-meta-line {
+    padding-right: 4.75rem;
+  }
 }
 
 /* =========================================================

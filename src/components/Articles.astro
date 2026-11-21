@@ -16,7 +16,7 @@ const articles = await getArticles();
     {articles.map(article => {
       const style = platformConfig[article.platform] || platformConfig.Blog;
       const proxyUrl = article.thumbnail
-        ? `https://images.weserv.nl/?url=${encodeURIComponent(article.thumbnail)}&w=800&af`
+        ? `https://images.weserv.nl/?url=${encodeURIComponent(article.thumbnail)}&w=800&output=webp&af`
         : '';
 
       return (
