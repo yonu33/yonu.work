@@ -1,0 +1,12 @@
+# Cloudflare Pages の配信設定（https://developers.cloudflare.com/pages/configuration/headers/）
+
+# 全ページ共通：基本的なセキュリティ指定
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# ビルドで作られる CSS / JS はファイル名に内容のハッシュが入るので、1年間キャッシュしてよい
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
