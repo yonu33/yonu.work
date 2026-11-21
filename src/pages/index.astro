@@ -13,7 +13,8 @@ const VISIBLE_HISTORY = 7;
 const historyRows = history.slice().reverse().map(item => ({ ...item, year: item.date.slice(0, 4) }));
 ---
 
-<Layout title="Top">
+<!-- 1ページだけのサイトなので、タイトルはサイト名のみ（title を渡さない） -->
+<Layout>
   <div id="top" data-scroll-scene="passport" class="py-10">
     <Hero />
 
