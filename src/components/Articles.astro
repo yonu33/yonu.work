@@ -15,9 +15,14 @@ const articles = await getArticles();
   <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-8">
     {articles.map(article => {
       const style = platformConfig[article.platform] || platformConfig.Blog;
-      const proxyUrl = article.thumbnail
-        ? `https://images.weserv.nl/?url=${encodeURIComponent(article.thumbnail)}&w=800&output=webp&af`
-        : '';
+      // サムネイルは画像変換サービス（weserv）で縮小・WebP 化する。
+      // ただし Qiita の画像（imgix）は URL が長すぎて weserv が失敗するうえ、すでに最適化済みなので直接読み込む。
+      const isImgix = article.thumbnail && new URL(article.thumbnail).hostname.endsWith('imgix.net');
+      const proxyUrl = !article.thumbnail
+        ? ''
+        : isImgix
+          ? article.thumbnail
+          : `https://images.weserv.nl/?url=${encodeURIComponent(article.thumbnail)}&w=800&output=webp&af`;
 
       return (
         <a href={article.url} target="_blank" rel="noopener noreferrer" class="group block">
