@@ -1,0 +1,30 @@
+# 記事一覧（Qiita / Zenn / note）はビルド時に取得するので、毎日1回 Cloudflare Pages を再ビルドして最新にする。
+#
+# 準備（最初の1回だけ）
+#   1. Cloudflare ダッシュボード → Workers & Pages → yonu-astro-page → 設定 → ビルド → デプロイフック
+#      で、ブランチ main のフックを作成し、表示された URL をコピーする
+#   2. GitHub のリポジトリ → Settings → Secrets and variables → Actions → New repository secret
+#      名前: CF_PAGES_DEPLOY_HOOK / 値: 1 でコピーした URL
+#
+# Actions タブの「Run workflow」から手動でも実行できる。
+name: Scheduled rebuild
+
+on:
+  schedule:
+    - cron: "0 21 * * *" # 毎日 6:00（日本時間）
+  workflow_dispatch:
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cloudflare Pages deploy hook
+        env:
+          DEPLOY_HOOK: ${{ secrets.CF_PAGES_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "CF_PAGES_DEPLOY_HOOK が未設定のためスキップします"
+            exit 0
+          fi
+          curl -fsS -X POST "$DEPLOY_HOOK" > /dev/null
+          echo "再ビルドを開始しました"
