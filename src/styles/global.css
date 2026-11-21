@@ -1,27 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --bg-page: #ffffff;
-    --bg-card: #f8fafc;
-    --text-main: #0f172a;
-    --text-muted: #64748b;
-    --border-color: #f1f5f9;
+    --bg-page: #dfeaf5;
+    --bg-card: #ffffff;
+    --text-main: #1b2f48;
+    --text-muted: #62758a;
+    --border-color: #9db4ca;
+    --accent: #fff3a6;
+    --accent-strong: #0645ad;
+    --accent-cool: #176f9f;
+    --shadow-color: #8aa3bb;
   }
 
   :root.dark {
-    --bg-page: #0f172a;
-    --bg-card: #1e293b;
-    --text-main: #f1f5f9;
-    --text-muted: #94a3b8;
-    --border-color: #334155;
+    --bg-page: #172638;
+    --bg-card: #20364d;
+    --text-main: #eef6ff;
+    --text-muted: #a7b9cc;
+    --border-color: #3c5873;
+    --accent: #5b4720;
+    --accent-strong: #8bc7ff;
+    --accent-cool: #71d7e8;
+    --shadow-color: #07101a;
+  }
+
+  html {
+    background: var(--bg-page);
+  }
+
+  body {
+    background-color: var(--bg-page);
+    background-image:
+      linear-gradient(90deg, rgba(89, 113, 137, 0.06) 1px, transparent 1px),
+      linear-gradient(#f8fbff 0, var(--bg-page) 180px);
+    background-size: 32px 32px, auto;
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: 500;
+  }
+
+  :root.dark body {
+    background-image:
+      linear-gradient(90deg, rgba(139, 199, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(#263d56 0, var(--bg-page) 180px);
+    background-size: 32px 32px, auto;
   }
 }
 
 @layer components {
   .card-surface {
-    @apply bg-[var(--bg-card)] border border-[var(--bg-card)] shadow-sm rounded-2xl transition-all duration-300;
+    @apply bg-[var(--bg-card)] border border-[var(--border-color)] shadow-sm rounded-none transition-all duration-300;
+  }
+
+  .card-surface:hover {
+    border-color: var(--accent-strong);
+  }
+
+  a {
+    color: var(--accent-strong);
+  }
+
+  a:hover {
+    color: var(--accent-cool);
+  }
+
+  .retro-panel {
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    box-shadow: 2px 2px 0 rgba(78, 108, 136, 0.22);
+  }
+
+  .ticket-surface {
+    position: relative;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+  }
+
+  .ticket-surface::before,
+  .ticket-surface::after {
+    position: absolute;
+    top: 50%;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    background: var(--bg-page);
+    content: "";
+    pointer-events: none;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+
+  .ticket-surface::before {
+    left: -15px;
+    clip-path: inset(0 0 0 50%);
+  }
+
+  .ticket-surface::after {
+    right: -15px;
+    clip-path: inset(0 50% 0 0);
+  }
+
+  .ticket-perforation {
+    border-right: 1px dashed var(--border-color);
+  }
+
+  .ticket-label,
+  .ticket-meta {
+    color: var(--text-muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+  }
+
+  .ticket-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--border-color);
+  }
+
+  .ticket-status {
+    color: var(--accent-cool);
+  }
+
+  .ticket-status i {
+    display: inline-block;
+    width: 0.45rem;
+    height: 0.45rem;
+    margin-right: 0.35rem;
+    border-radius: 9999px;
+    background: currentColor;
+    animation: ticket-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes ticket-pulse {
+    50% { opacity: 0.35; }
+  }
+
+  .retro-heading {
+    border-left: 5px solid var(--accent-strong);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.45rem 0.7rem;
+    background: linear-gradient(90deg, rgba(222, 237, 250, 0.9), transparent);
+  }
+
+  .pixel-avatar {
+    width: 112px;
+    height: 112px;
+    object-fit: cover;
+    image-rendering: pixelated;
+  }
+
+  .site-pixel-icon {
+    width: 24px;
+    height: 24px;
+    image-rendering: pixelated;
+    border: 1px solid var(--border-color);
+  }
+}
+
+@layer utilities {
+  .retro-label {
+    color: var(--text-muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: 0.16em;
+  }
+
+  .retro-accent {
+    background: var(--accent);
+    color: var(--text-main);
+    border: 1px solid #c4b95d;
   }
 }

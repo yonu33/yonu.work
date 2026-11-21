@@ -11,12 +11,12 @@ import { history } from '../data/history.js';
   <main class="max-w-3xl mx-auto py-20 px-6 space-y-24">
     <header>
       <h1 class="text-4xl font-black tracking-tight text-[var(--text-main)] mb-4 text-center md:text-left">About Me</h1>
-      <p class="text-[var(--text-muted)] font-medium text-center md:text-left">{profile.fullName}</p>
+      <p class="text-[var(--text-muted)] font-medium text-center md:text-left">{profile.name}</p>
       <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 text-center md:text-left uppercase tracking-widest">{profile.role}</p>
     </header>
 
     <section>
-      <h2 class="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)] font-bold mb-8 italic">■ Personal</h2>
+      <h2 class="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)] font-bold mb-8 italic">■ Profile</h2>
       <ul class="space-y-4">
         {profile.personal.map(item => (
           <li class="flex border-b border-[var(--border-color)] pb-2">

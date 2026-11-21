@@ -53,5 +53,18 @@ export const projects = [
       Infrastructure: "Docker, Docker Compose, Raspberry Pi 4 Model B"
     },
     github: "https://github.com/yonu33/akabeko-reminder-bot"
+  },
+  {
+    id: "motsuku",
+    title: "もうつく",
+    period: "2026.10",
+    summary: "位置情報で待ち合わせを支援するWebアプリ",
+    description: "JPHACKS 2026 Hack Day（仙台会場）でチーム開発した、遅刻する側と待つ側の双方を支援する位置情報共有Webアプリ。バックエンドを主に担当し、ルーム管理や位置情報共有など、アプリの中核となる仕組みの構築に取り組んだ。",
+    stack: {
+      Frontend: "React 19, TypeScript, Vite, react-map-gl, MapLibre GL",
+      Backend: "Hono, TypeScript",
+      Infrastructure: "Cloudflare Workers"
+    },
+    github: "https://github.com/jphacks/sd_2604",
   }
 ];

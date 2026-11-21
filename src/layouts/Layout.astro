@@ -58,13 +58,16 @@ const navItems = [
     </script>
   </head>
   <body class="bg-[var(--bg-page)] text-[var(--text-main)] font-sans antialiased min-h-screen transition-colors duration-300">
-    <nav class="sticky top-0 z-50 bg-[var(--bg-page)]/80 backdrop-blur-md border-b border-[var(--border-color)]">
-      <div class="max-w-4xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
-        <a href="/" class="font-black text-lg md:text-xl tracking-tighter text-[var(--text-main)] shrink-0">yonu.work</a>
+    <nav class="sticky top-0 z-50 bg-[var(--bg-card)] border-b border-[var(--border-color)]">
+      <div class="max-w-3xl mx-auto px-4 md:px-6 h-14 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-bold text-lg md:text-xl tracking-tight text-[var(--text-main)] shrink-0">
+          <img src="/favicon.png" alt="" class="site-pixel-icon" />
+          <span>yonu.work</span>
+        </a>
         <div class="flex items-center gap-4 md:gap-8 overflow-x-hidden">
           <div class="flex gap-4 md:gap-8">
             {navItems.map(item => (
-              <a href={item.href} class="text-xs md:text-sm font-bold text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors whitespace-nowrap">
+              <a href={item.href} class="text-xs md:text-sm font-bold text-[var(--accent-strong)] hover:text-[var(--accent-cool)] underline underline-offset-2 transition-colors whitespace-nowrap">
                 {item.name}
               </a>
             ))}
@@ -73,7 +76,7 @@ const navItems = [
         </div>
       </div>
     </nav>
-    <main class="max-w-4xl mx-auto px-4 md:px-6 pt-8 md:pt-12">
+    <main class="max-w-3xl mx-auto px-4 md:px-6 pt-5 md:pt-8">
       <slot />
     </main>
   </body>
