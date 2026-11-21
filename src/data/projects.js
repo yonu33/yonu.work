@@ -26,7 +26,7 @@ export const projects = [
       Backend: "Discord Webhook API, JavaScript",
       Infrastructure: "Cloudflare Workers"
     },
-    github: "https://github.com/yonu33/gakushoku-bot"
+    github: "非公開"
   },
   {
     id: "uoa-hub-auth-bot",
