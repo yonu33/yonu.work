@@ -1009,7 +1009,7 @@ body * {
   font-family: "DotGothic16", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif !important;
 }
 
-/* ---------- 作ったもののカード：技術タグと外部リンク ---------- */
+/* ---------- 作ったもののカード：技術タグ（GitHub・解説記事へのリンクは詳細のポップアップ内） ---------- */
 .project-tags {
   display: flex;
   flex-wrap: wrap;
@@ -1026,18 +1026,6 @@ body * {
   color: var(--text-muted);
   font-size: .72rem;
   line-height: 1.6;
-}
-
-.project-link {
-  color: var(--text-muted);
-  text-decoration: underline;
-  text-decoration-color: var(--border-color);
-  text-underline-offset: 3px;
-}
-
-.project-link:hover {
-  color: var(--accent-strong);
-  text-decoration-color: currentColor;
 }
 
 /* =========================================================

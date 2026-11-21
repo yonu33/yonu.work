@@ -99,15 +99,7 @@ import { history } from '../data/history.js';
                   {project.tags.map(tag => <li>{tag}</li>)}
                 </ul>
               )}
-              <div class="mt-auto pt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs font-bold">
-                <span class="project-toggle text-[var(--accent-strong)]">詳細を開く +</span>
-                {project.github && project.github !== '非公開' && (
-                  <a class="project-link" href={project.github} target="_blank" rel="noopener noreferrer">GitHub →</a>
-                )}
-                {project.article && (
-                  <a class="project-link" href={project.article} target="_blank" rel="noopener noreferrer">解説記事 →</a>
-                )}
-              </div>
+              <span class="project-toggle mt-auto pt-4 text-xs font-bold text-[var(--accent-strong)]">詳細を開く +</span>
             </div>
           </article>
         ))}
@@ -268,13 +260,8 @@ import { history } from '../data/history.js';
       };
 
       document.querySelectorAll('[data-project-card]').forEach(card => {
-        // カード内のリンク（GitHub・解説記事）の操作では詳細を開かない
-        card.addEventListener('click', event => {
-          if (event.target.closest('a')) return;
-          open(card);
-        });
+        card.addEventListener('click', () => open(card));
         card.addEventListener('keydown', event => {
-          if (event.target !== card) return;
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             open(card);
