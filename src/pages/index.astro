@@ -93,6 +93,7 @@ const historyRows = history.slice().reverse().map(item => ({ ...item, year: item
             data-project-stack={JSON.stringify(project.stack)}
             data-project-github={project.github}
             data-project-article={project.article || ''}
+            data-project-site={project.site || ''}
           >
             <div class="journey-card-head px-5 py-3 flex items-center justify-between">
               <span>LOG / {String(index + 1).padStart(2, '0')}</span>
@@ -253,6 +254,7 @@ const historyRows = history.slice().reverse().map(item => ({ ...item, year: item
           return row;
         }));
         const links = [];
+        if (d.projectSite) links.push(externalLink(d.projectSite, 'サイトを開く →'));
         if (d.projectArticle) links.push(externalLink(d.projectArticle, '解説記事 →'));
         if (d.projectGithub && d.projectGithub !== '非公開') links.push(externalLink(d.projectGithub, 'GitHub →'));
         field('links').replaceChildren(...links);

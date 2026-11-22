@@ -72,5 +72,21 @@ export const projects = [
       Infrastructure: "Cloudflare Workers"
     },
     github: "https://github.com/jphacks/sd_2604",
+  },
+  {
+    id: "tecupid",
+    title: "tecupid",
+    tags: ["TypeScript", "Astro", "Cloudflare Workers"],
+    period: "2026.11",
+    summary: "エンジニアのための技術マッチングアプリ",
+    description: "技術名を伏せた「特徴カード」に「すき」か「パス」で答えると、言語やフレームワークなど9部門から、次に学ぶ技術を推薦するWebアプリ。マッチングした結果は、サムネイル付きでXに共有できる。",
+    stack: {
+      Frontend: "Astro 7, React 19, TypeScript",
+      Infrastructure: "Cloudflare Workers（Static Assets）",
+      Test: "Vitest"
+    },
+    github: "非公開",
+    // 公開中のサイト（詳細に「サイトを開く」として出す）
+    site: "https://tecupid.yonu.work"
   }
 ];
