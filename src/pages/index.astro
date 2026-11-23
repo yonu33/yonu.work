@@ -215,6 +215,9 @@ const historyRows = history.slice().reverse().map(item => ({ ...item, year: item
 
     <Footer />
   </div>
+  <!-- プロジェクト詳細のポップアップ一式。slot="overlay" で main の外（body 直下）に出して、ヘッダーや下部バーより手前に重ねる。
+       スクリプトもここに置き、ポップアップの要素より後で実行されるようにする -->
+  <Fragment slot="overlay">
   <div id="project-backdrop" class="project-backdrop hidden" aria-hidden="true"></div>
   <aside id="project-popover" class="project-popover hidden" role="dialog" aria-modal="true" aria-labelledby="project-popover-title">
       <div class="project-popover-head">
@@ -235,6 +238,15 @@ const historyRows = history.slice().reverse().map(item => ({ ...item, year: item
       if (!popover || !backdrop) return;
       const field = id => popover.querySelector(`#project-popover-${id}`);
       let openedFrom = null;
+
+      // 開いている間は、ポップアップ以外（ヘッダー・本文・下部バーなど）を操作できなくする。
+      // クリックだけでなく、Tab キーで背景のリンクに移ることも防ぐ
+      const setBackgroundInert = inert => {
+        for (const el of document.body.children) {
+          if (el === popover || el === backdrop || el.tagName === 'SCRIPT' || el.tagName === 'ASTRO-DEV-TOOLBAR') continue;
+          el.inert = inert;
+        }
+      };
 
       const externalLink = (href, text) => Object.assign(document.createElement('a'), {
         href, textContent: text, target: '_blank', rel: 'noopener noreferrer'
@@ -262,6 +274,7 @@ const historyRows = history.slice().reverse().map(item => ({ ...item, year: item
         popover.classList.remove('hidden');
         backdrop.classList.remove('hidden');
         document.body.classList.add('project-detail-open');
+        setBackgroundInert(true);
         card.setAttribute('aria-expanded', 'true');
         openedFrom = card;
         popover.querySelector('[data-popover-close]').focus();
@@ -272,6 +285,7 @@ const historyRows = history.slice().reverse().map(item => ({ ...item, year: item
         popover.classList.add('hidden');
         backdrop.classList.add('hidden');
         document.body.classList.remove('project-detail-open');
+        setBackgroundInert(false); // フォーカスを戻す前に解除する（inert のままだとフォーカスできない）
         openedFrom?.setAttribute('aria-expanded', 'false');
         openedFrom?.focus();
         openedFrom = null;
@@ -292,7 +306,10 @@ const historyRows = history.slice().reverse().map(item => ({ ...item, year: item
         if (event.key === 'Escape') close();
       });
     })();
+  </script>
+  </Fragment>
 
+  <script is:inline>
     // 左右の目次に出すセクション（ページ上の並び順）。scene は data-scroll-scene の値
     const tocSections = [
       { scene: 'passport', id: 'top', name: 'TOP', title: 'トップ' },

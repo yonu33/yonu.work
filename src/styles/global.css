@@ -488,8 +488,15 @@
     outline-offset: 4px;
   }
 
+  /* 詳細を開いている間は背景をスクロールさせない */
   body.project-detail-open {
     overflow: hidden;
+  }
+
+  /* スクロールバーの幅を常に確保しておく。
+     詳細を開いてスクロールバーが消えても、ページの幅が変わって中身が横にずれないようにする */
+  html {
+    scrollbar-gutter: stable;
   }
 
   .project-backdrop {

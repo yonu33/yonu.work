@@ -132,5 +132,8 @@ const isHome = Astro.url.pathname === '/';
         </a>
       ))}
     </nav>
+    <!-- 詳細のポップアップなど、ページ全体より手前に出すもの。
+         main の中に置くと main の重なり順（z-index: 10）に閉じ込められ、ヘッダーや下部バーより下になってしまう -->
+    <slot name="overlay" />
   </body>
 </html>
