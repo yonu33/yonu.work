@@ -11,6 +11,7 @@ export const history = [
   { date: "2025.11.24", text: "『yonu.work』ドメイン取得", href: "https://yonu.work" },
   { date: "2025.12.09", text: "『Aizu Advent Calendar 2025』に参加", href: "https://adventar.org/calendars/12305" },
   { date: "2025.12.20", text: "『Zli 学内LT 2025/12』に参加・登壇", href: "https://zli.connpass.com/event/378936/" },
+  { date: "2026.02.01", text: "『防衛省サイバーコンテスト2026』にチームで参加", href: "https://www.mod.go.jp/j/approach/defense/cyber/c_contest/2026.html" },
   { date: "2026.02.13", text: "『28卒,29卒学生あつまれ！ニックトレインAIZU』に参加", href: "https://techtrain.connpass.com/event/377936/" },
   { date: "2026.02.22", text: "『GDGoC Japan Hackathon 2026 Kickoff（Sendai）』にスタッフとして参加", href: "https://gdg.community.dev/events/details/google-gdg-on-campus-university-of-aizu-fukushima-japan-presents-gdgoc-japan-hackathon/cohost-gdg-on-campus-tokyo-metropolitan-university-tokyo-japan/" },
   { date: "2026.03.07 - 03.11", text: "青春18きっぷ（5日間）で会津若松→別府→仙台を走破（滞在地：姫路・博多・別府・八幡浜・浜松）" },
