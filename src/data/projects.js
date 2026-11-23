@@ -18,13 +18,14 @@ export const projects = [
     id: "gakushoku-bot",
     title: "gakushoku-bot",
     tags: ["JavaScript", "Cloudflare Workers", "Discord"],
-    period: "2025.11",
+    period: "2025.11 -",
     summary: "毎日定時に会津大学の学食メニューをDiscordへ通知するBot",
     description: "毎日定時に会津大学の学食メニューをDiscordへ通知するアプリケーション。10:00に『日替わりランチ』、15:30に『夕食セット』、19:00に『明日のメニュー予告』を通知する。",
     stack: {
       Frontend: "Discord Client",
       Backend: "Discord Webhook API, JavaScript",
-      Infrastructure: "Cloudflare Workers"
+      Infrastructure: "Cloudflare Workers (Cron Triggers)",
+      Test: "Node.js test runner, GitHub Actions"
     },
     github: "https://github.com/yonu33/gakushoku-bot"
   },
@@ -69,9 +70,11 @@ export const projects = [
     stack: {
       Frontend: "React 19, TypeScript, Vite, react-map-gl, MapLibre GL",
       Backend: "Hono, TypeScript",
-      Infrastructure: "Cloudflare Workers"
+      Database: "Cloudflare Workers KV",
+      Infrastructure: "Cloudflare Workers, Cloudflare Pages"
     },
     github: "https://github.com/jphacks/sd_2604",
+    site: "https://sd2604-frontend.pages.dev"
   },
   {
     id: "tecupid",

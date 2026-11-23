@@ -21,10 +21,11 @@ export const profile = {
   ],
   tech: [
     { cat: "Languages", details: "C, C#, Python, JavaScript, TypeScript" },
-    { cat: "Frontend", details: "React, Vite, XAML (WPF), HTML / CSS, JavaScript" },
+    { cat: "Frontend", details: "React, Astro, Vite, XAML (WPF), HTML / CSS, JavaScript" },
     { cat: "Backend", details: ".NET, Python, JavaScript, TypeScript, Hono, GAS" },
-    { cat: "Infrastructure", details: "Cloudflare Workers, Raspberry Pi" },
-    { cat: "Tools", details: "Git, GitHub, MediaPipe, Discord API / Webhook" },
+    { cat: "Database", details: "SQLite, Google Sheets, Cloudflare Workers KV" },
+    { cat: "Infrastructure", details: "Cloudflare Workers / Pages, Docker, Raspberry Pi" },
+    { cat: "Tools", details: "Git, GitHub, GitHub Actions, Vitest, MediaPipe, Discord API / Webhook" },
     { cat: "Other", details: "韓国語（旅行に十分な程度）, 危険物取扱者乙種4類" }
   ]
 };
