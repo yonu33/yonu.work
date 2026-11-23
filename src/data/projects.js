@@ -53,7 +53,7 @@ export const projects = [
     description: "Discord上で登録した予定をロールまたはユーザ個人単位に向けて会津弁でメンションする、中規模コミュニティ向けリマインダーBot。",
     stack: {
       Frontend: "Discord Client",
-      Backend: "Python (discord.py, APScheduler)",
+      Backend: "Python 3.11 (discord.py, python-dateutil)",
       Database: "SQLite",
       Infrastructure: "Docker, Docker Compose, Raspberry Pi 4 Model B"
     },
