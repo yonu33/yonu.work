@@ -26,7 +26,7 @@ export const projects = [
       Backend: "Discord Webhook API, JavaScript",
       Infrastructure: "Cloudflare Workers"
     },
-    github: "非公開"
+    github: "https://github.com/yonu33/gakushoku-bot"
   },
   {
     id: "uoa-hub-auth-bot",
@@ -79,7 +79,7 @@ export const projects = [
     tags: ["TypeScript", "Astro", "Cloudflare Workers"],
     period: "2026.11",
     summary: "エンジニアのための技術マッチングアプリ",
-    description: "技術名を伏せた「特徴カード」に「すき」か「パス」で答えると、言語やフレームワークなど9部門から、次に学ぶ技術を推薦するWebアプリ。マッチングした結果は、サムネイル付きでXに共有できる。",
+    description: "技術名を伏せた「特徴カード」に「すき」か「興味なし」で答えると、言語やフレームワークなど9部門から、次に学ぶ技術を推薦するWebアプリ。マッチングした結果は、サムネイル付きでXに共有できる。",
     stack: {
       Frontend: "Astro 7, React 19, TypeScript",
       Infrastructure: "Cloudflare Workers（Static Assets）",
