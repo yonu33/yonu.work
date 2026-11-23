@@ -13,7 +13,7 @@ Astro と Tailwind CSS で作った 1 ページの静的サイトで、Cloudflar
 | プロフィール・技術スタック・連絡先 | `src/data/profile.js` |
 | 作ったもの | `src/data/projects.js` |
 | これまでの記録 | `src/data/history.js` |
-| 韓国で訪れた街（KOREA LOG） | 自動で集計（`history.js` の「韓国にN日間滞在（都市・都市…）」から）。都市名に添えるハングルは `src/data/korea.js` |
+| GitHub の使用言語 | ビルド時に公開リポジトリから自動で集計（`src/lib/githubLanguages.js`）。CSS・HTML などは除く。取得に失敗したら `src/data/githubLanguages.js` の予備の値。ビルド環境に `GITHUB_TOKEN` を設定すると、GitHub の取得回数の制限に当たりにくくなる |
 | 記事・発信 | 自動で取得（下の「記事一覧」） |
 | 相互リンク・このサイトへのリンク | `src/components/MutualLinks.astro` |
 | トップのチケット（SNS リンク・発券情報） | `src/components/Hero.astro` |

@@ -1035,43 +1035,50 @@ body * {
   line-height: 1.6;
 }
 
-/* ---------- 自分について：KOREA LOG（韓国で訪れた街） ---------- */
-.korea-log {
+/* ---------- 自分について：GitHub の使用言語 ---------- */
+.gh-languages {
   margin-top: 1rem;
   border: 1px solid var(--border-color);
   background: var(--bg-card);
 }
 
-.korea-log-cities {
+.gh-languages-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
-  gap: .15rem .75rem;
+  gap: .4rem;
   margin: 0;
-  padding: .5rem .75rem;
+  padding: .7rem .75rem;
   list-style: none;
 }
 
-.korea-log-cities li {
-  display: flex;
-  align-items: baseline;
-  gap: .35rem;
-  white-space: nowrap;
+.gh-languages-list li {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr) 3.25rem;
+  align-items: center;
+  gap: .75rem;
+  font-size: .78rem;
 }
 
-.korea-log-hangul {
+.gh-languages-name {
   color: var(--text-main);
-  font-size: .85rem;
-  font-weight: 700;
 }
 
-.korea-log-name {
+/* 棒グラフ：草の表と同じく、四角いマスが並ぶ見た目にする */
+.gh-languages-bar {
+  height: 10px;
+  background: repeating-linear-gradient(90deg, var(--border-color) 0 8px, transparent 8px 10px);
+  opacity: .9;
+}
+
+.gh-languages-bar span {
+  display: block;
+  height: 100%;
+  background: repeating-linear-gradient(90deg, var(--accent-strong) 0 8px, transparent 8px 10px);
+}
+
+.gh-languages-percent {
   color: var(--text-muted);
-  font-size: .72rem;
-}
-
-.korea-log-count {
-  color: var(--accent-strong);
-  font-size: .68rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---------- これまでの記録：年の見出し ---------- */

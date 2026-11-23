@@ -7,10 +7,10 @@ import Footer from '../components/Footer.astro';
 import { profile } from '../data/profile.js';
 import { projects } from '../data/projects.js';
 import { history } from '../data/history.js';
-import { getKoreaLog } from '../lib/korea.js';
+import { getGithubLanguages } from '../lib/githubLanguages.js';
 
-// 韓国の滞在の集計（history.js の「韓国にN日間滞在（…）」から）
-const koreaLog = getKoreaLog(history);
+// 公開リポジトリの使用言語（ビルド時に GitHub から集計）
+const githubLanguages = await getGithubLanguages();
 
 // これまでの記録：新しい順に並べ、最初の VISIBLE_HISTORY 件だけ表示する（残りは「すべて表示」で開く）
 const VISIBLE_HISTORY = 5;
@@ -59,18 +59,18 @@ const historyRows = history.slice().reverse().map(item => ({ ...item, year: item
               loading="lazy"
             />
           </a>
-          {koreaLog.cities.length > 0 && (
-            <div class="korea-log">
+          {githubLanguages.length > 0 && (
+            <div class="gh-languages">
               <div class="github-contributions-head">
-                <span>KOREA LOG</span>
-                <strong>{koreaLog.trips}回 / {koreaLog.days}日 / {koreaLog.cities.length}都市</strong>
+                <span>GitHub</span>
+                <strong>Languages</strong>
               </div>
-              <ul class="korea-log-cities" aria-label="韓国で訪れた街">
-                {koreaLog.cities.map(city => (
+              <ul class="gh-languages-list" aria-label="公開リポジトリの使用言語（コードの量の割合）">
+                {githubLanguages.map(lang => (
                   <li>
-                    {city.hangul && <span class="korea-log-hangul" lang="ko">{city.hangul}</span>}
-                    <span class="korea-log-name">{city.name}</span>
-                    {city.count > 1 && <span class="korea-log-count" aria-label={`${city.count}回`}>×{city.count}</span>}
+                    <span class="gh-languages-name">{lang.name}</span>
+                    <span class="gh-languages-bar" aria-hidden="true"><span style={`width:${lang.percent}%`}></span></span>
+                    <span class="gh-languages-percent">{lang.percent.toFixed(1)}%</span>
                   </li>
                 ))}
               </ul>
