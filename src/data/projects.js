@@ -85,7 +85,7 @@ export const projects = [
       Infrastructure: "Cloudflare Workers（Static Assets）",
       Test: "Vitest"
     },
-    github: "非公開",
+    github: "https://github.com/yonu33/tecupid",
     // 公開中のサイト（詳細に「サイトを開く」として出す）
     site: "https://tecupid.yonu.work"
   }
