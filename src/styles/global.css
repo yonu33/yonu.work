@@ -1035,6 +1035,45 @@ body * {
   line-height: 1.6;
 }
 
+/* ---------- 自分について：KOREA LOG（韓国で訪れた街） ---------- */
+.korea-log {
+  margin-top: 1rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+}
+
+.korea-log-cities {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+  gap: .15rem .75rem;
+  margin: 0;
+  padding: .5rem .75rem;
+  list-style: none;
+}
+
+.korea-log-cities li {
+  display: flex;
+  align-items: baseline;
+  gap: .35rem;
+  white-space: nowrap;
+}
+
+.korea-log-hangul {
+  color: var(--text-main);
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+.korea-log-name {
+  color: var(--text-muted);
+  font-size: .72rem;
+}
+
+.korea-log-count {
+  color: var(--accent-strong);
+  font-size: .68rem;
+}
+
 /* ---------- これまでの記録：年の見出し ---------- */
 .marsu-year {
   margin: 0;
