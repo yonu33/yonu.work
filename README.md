@@ -1,6 +1,6 @@
 # yonu.work
 
-yonu のポートフォリオサイト（https://yonu.work/）です。作ったもの・活動の記録・記事をまとめています。
+yonu のポートフォリオサイト（https://yonu.work/ ）です。作ったもの・活動の記録・記事をまとめています。
 
 Astro と Tailwind CSS で作った 1 ページの静的サイトで、Cloudflare Pages で公開しています。
 
