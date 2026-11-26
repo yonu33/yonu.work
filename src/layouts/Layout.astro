@@ -5,10 +5,10 @@ const { title } = Astro.props;
 
 const siteName = "yonu.work";
 // 検索結果や SNS で共有したときに表示される説明文
-const siteDescription = "作って、仲間を集めて、ときどき旅に出る。yonu のポートフォリオサイトです。";
+const siteDescription = "作って、仲間を集めて、ときどき旅に出る。yonuのポートフォリオサイトです。";
 // リンクを貼ったときの画像（1200×630）。作り直すときは `npm run og`（scripts/og/og.html を撮影する）
 const ogImage = new URL('/og.png', Astro.site ?? 'https://yonu.work').href;
-const ogImageAlt = "ドット絵の猫と「yonu 作って、仲間を集めて、ときどき旅に出る。yonu.work」";
+const ogImageAlt = "ドット絵の猫と「yonu」「作って、仲間を集めて、ときどき旅に出る。」「yonu.work」の文字";
 const pageTitle = title ? `${title} | ${siteName}` : siteName;
 
 const discordEmbedColor = "#008578";
