@@ -47,8 +47,14 @@ const linkKit = [
         </div>
 
         <div class="overflow-hidden min-w-0">
-          <h3 class="font-bold text-sm md:text-base text-[var(--text-main)] truncate group-hover:text-[var(--accent-strong)] transition-colors">
-            {site.name}
+          <!-- 見出しはサイト名、横に名前（敬称略）。サイト名がなければ名前だけ -->
+          <h3 class="flex items-baseline gap-2 min-w-0">
+            <span class="font-bold text-sm md:text-base text-[var(--text-main)] truncate group-hover:text-[var(--accent-strong)] transition-colors">
+              {site.siteName || site.name}
+            </span>
+            {site.siteName && (
+              <span class="mutual-owner shrink-0 text-xs text-[var(--text-muted)]">{site.name}</span>
+            )}
           </h3>
           {site.description && (
             <!-- 本人の紹介文。長いものは 2 行で省略し、カーソルを乗せると全文が出る -->
@@ -70,7 +76,7 @@ const linkKit = [
       <img src="/favicon.png" alt="" width="40" height="40" />
       <div>
         <h3>このサイトへのリンク</h3>
-        <p>相互リンク歓迎です。下の情報をご自由にお使いください。アイコンは直リンクして大丈夫です。</p>
+        <p>相互リンク歓迎です。下の情報をご自由にお使いください。アイコンは直リンクOKです。</p>
       </div>
     </div>
     <dl class="link-kit-rows">
