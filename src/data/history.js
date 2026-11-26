@@ -5,7 +5,7 @@ export const history = [
   { date: "2025.05.10", text: "『Zli 大LT 2025 春 in Aizu』　参加", href: "https://zli.connpass.com/event/351157/" },
   { date: "2025.06.14", text: "『Aizu Hack / Re:Aizu Hack』　参加", href: "https://zli.connpass.com/event/349133/" },
   { date: "2025.08.25", text: "GDGoC Aizu Co-Organizer　就任", href: "https://gdg.community.dev/gdg-on-campus-university-of-aizu-fukushima-japan/" },
-  { date: "2025.09.11 - 09.18", text: "韓国　滞在（8日間：ソウル・金浦・波州・釜山・東灘・仁川）" },
+  { date: "2025.09.11 - 09.18", text: "大韓民国　滞在（8日間：ソウル・金浦・波州・釜山・東灘・仁川）" },
   { date: "2025.10.18", text: "『Zli 大LT 2025 秋 in Aizu』　参加", href: "https://zli.connpass.com/event/367954/" },
   { date: "2025.11.01", text: "ポートフォリオサイト　開設" },
   { date: "2025.11.24", text: "独自ドメイン『yonu.work』　取得", href: "https://yonu.work" },
@@ -27,7 +27,7 @@ export const history = [
   { date: "2026.07.12", text: "AizuDMC主催『GLAZE 54』（会場：karan堂）　DJ出演", href: "https://x.com/aizudmc/status/2074037209376948614" },
   { date: "2026.08.08", text: "『夏休みプランニングLT会2026』　主催", href: "https://gdg.community.dev/events/details/google-gdg-on-campus-university-of-aizu-fukushima-japan-presents-xia-xiu-mipuranningulthui-2026/" },
   { date: "2026.08.16", text: "会津大学アニメ研究会の部誌に『日韓オタクカルチャー最前線ーー韓国における日本のオタク文化の流行と双方向の循環について』　寄稿、『コミックマーケット108』　参加", href: "https://duani.booth.pm/items/8763624" },
-  { date: "2026.08.28 - 09.08", text: "韓国　滞在（12日間：ソウル・義王・釜山・全州・光州・益山・群山・大田）" },
+  { date: "2026.08.28 - 09.08", text: "大韓民国　滞在（12日間：ソウル・義王・釜山・全州・光州・益山・群山・大田）" },
   { date: "2026.10.17 - 10.18", text: "『JPHACKS 2026 Hack Day』仙台会場　チームで出場、ブロックスポンサー賞　受賞", href: "https://jphacks.com/2026/hackday/sd/" },
   { date: "2026.11.01", text: "『TSKaigi Sendai 2026』　運営スタッフ", href: "https://tskaigi.connpass.com/event/399797/" }
 ];
