@@ -12,7 +12,7 @@ export const profile = {
   ],
   personal: [
     { label: "名前", value: "yonu" },
-    { label: "誕生日", value: "10月12日" },
+    { label: "生年月日", value: "2006年10月12日" },
     { label: "出身地", value: "宮城県仙台市" },
     { label: "所属", value: "会津大学コンピュータ理工学部（2025年度入学・33期生）、GDGoC Aizu（Main Organizer）" },
     { label: "サークル", value: "カンフー部、DMC、会津大学アニメ研究会、Zli 等" },
@@ -26,6 +26,6 @@ export const profile = {
     { cat: "Database", details: "SQLite, Google Sheets, Cloudflare Workers KV" },
     { cat: "Infrastructure", details: "Cloudflare Workers / Pages, Docker, Raspberry Pi" },
     { cat: "Tools", details: "Git, GitHub, GitHub Actions, Vitest, MediaPipe, Discord API / Webhook" },
-    { cat: "Other", details: "韓国語（旅行に十分な程度）, 危険物取扱者乙種4類" }
+    { cat: "Other", details: "基本情報技術者, 危険物取扱者乙種4類, 韓国語（旅行に十分な程度）" }
   ]
 };
