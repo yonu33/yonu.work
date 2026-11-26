@@ -56,9 +56,14 @@ npm install
 npm run dev       # 開発サーバー（http://localhost:4321）
 npm run build     # dist/ に静的ビルド
 npm run preview   # ビルド結果をローカルで確認
+npm run og        # リンクを貼ったときの画像（public/og.png）を作り直す
 ```
 
 `npm run build` は、Cloudflare Pages でのビルドのために、最初に `npm install --legacy-peer-deps` を実行します。
+
+### リンクを貼ったときの画像（OGP 画像）
+
+`public/og.png`（1200×630）は、`scripts/og/og.html` を手元のブラウザ（Edge か Chrome）で撮影して作ります。文言やデザインを変えたら `npm run og` で作り直し、`public/og.png` をコミットしてください。フォントを Google Fonts から読むので、インターネットにつながった状態で実行します。ブラウザが見つからないときは、環境変数 `OG_BROWSER` にブラウザのパスを指定します。
 
 ## 公開
 
@@ -85,5 +90,6 @@ src/
   lib/          記事一覧・GitHub の使用言語・相互リンクの紹介文の取得
   styles/       見た目（末尾の「文字サイズの底上げ」で文字の大きさをまとめて調整）
   assets/icons/ SNS のアイコン
-public/         そのまま配信するファイル（アイコン画像、相互リンクのアイコン、_headers、_redirects、robots.txt）
+public/         そのまま配信するファイル（アイコン画像、OGP 画像、相互リンクのアイコン、_headers、_redirects、robots.txt）
+scripts/        OGP 画像を作るスクリプトとひな形（og/og.html・og/cat.png）
 ```
