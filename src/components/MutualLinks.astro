@@ -31,7 +31,7 @@ const linkKit = [
         class="retro-panel group flex items-center gap-3 md:gap-4 p-3 md:p-4 hover:border-[var(--accent-strong)] transition-colors"
       >
         <div class="w-12 h-12 shrink-0 flex items-center justify-center bg-[var(--bg-page)] overflow-hidden border border-[var(--border-color)]">
-          <!-- アイコンがない・読み込めないときは、名前の頭文字に差し替える -->
+          {/* アイコンがない・読み込めないときは、名前の頭文字に差し替える */}
           {site.icon && (
             <img
               src={site.icon}
@@ -47,7 +47,7 @@ const linkKit = [
         </div>
 
         <div class="overflow-hidden min-w-0">
-          <!-- 見出しはサイト名、横に名前（敬称略）。サイト名がなければ名前だけ -->
+          {/* 見出しはサイト名、横に名前（敬称略）。サイト名がなければ名前だけ */}
           <h3 class="flex items-baseline gap-2 min-w-0">
             <span class="font-bold text-sm md:text-base text-[var(--text-main)] truncate group-hover:text-[var(--accent-strong)] transition-colors">
               {site.siteName || site.name}
@@ -56,8 +56,8 @@ const linkKit = [
               <span class="mutual-owner shrink-0 text-xs text-[var(--text-muted)]">{site.name}</span>
             )}
           </h3>
+          {/* 本人の紹介文。長いものは 2 行で省略し、カーソルを乗せると全文が出る */}
           {site.description && (
-            <!-- 本人の紹介文。長いものは 2 行で省略し、カーソルを乗せると全文が出る -->
             <p class="mutual-desc text-xs text-[var(--text-main)] leading-relaxed line-clamp-2 mt-0.5" title={site.description}>
               {site.description}
             </p>
@@ -70,7 +70,7 @@ const linkKit = [
     ))}
   </div>
 
-  <!-- 相互リンクしてくれる人向けに、このサイトの情報をコピーできるようにする -->
+  {/* 相互リンクしてくれる人向けに、このサイトの情報をコピーできるようにする */}
   <div class="retro-panel link-kit mt-6">
     <div class="link-kit-head">
       <img src="/favicon.png" alt="" width="40" height="40" />

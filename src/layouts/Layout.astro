@@ -42,9 +42,9 @@ const isHome = Astro.url.pathname === '/';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <!-- 検索結果のアイコン用。Google は 48px の倍数の正方形を推奨しているので 192×192 も用意する（背景透明） -->
+    {/* 検索結果のアイコン用。Google は 48px の倍数の正方形を推奨しているので 192×192 も用意する（背景透明） */}
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
-    <!-- iPhone の「ホーム画面に追加」で使うアイコン（180×180、背景透明。iPhone では透明部分が黒になる） -->
+    {/* iPhone の「ホーム画面に追加」で使うアイコン（180×180、背景透明。iPhone では透明部分が黒になる） */}
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{pageTitle}</title>
 
@@ -62,7 +62,7 @@ const isHome = Astro.url.pathname === '/';
 
     <meta name="theme-color" content={discordEmbedColor} />
 
-    <!-- 横長の OGP 画像を大きいカードで出す -->
+    {/* 横長の OGP 画像を大きいカードで出す */}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@yonu33" />
     <meta name="twitter:title" content={pageTitle} />
@@ -95,8 +95,8 @@ const isHome = Astro.url.pathname === '/';
     <div id="travel-scene" class="travel-scene" aria-hidden="true">
       <div class="scene-sky"></div>
     </div>
-    <!-- 左右の余白（1280px以上で表示）：左＝全セクションの目次、右＝次のセクション。
-         現在地の強調と右の中身は index.astro のスクリプトが更新する -->
+    {/* 左右の余白（1280px以上で表示）：左＝全セクションの目次、右＝次のセクション。
+         現在地の強調と右の中身は index.astro のスクリプトが更新する */}
     <nav class="side-route side-left side-toc" aria-label="目次">
       <ol class="side-toc-list">
         {tocItems.map(item => (
@@ -142,8 +142,8 @@ const isHome = Astro.url.pathname === '/';
         </a>
       ))}
     </nav>
-    <!-- 詳細のポップアップなど、ページ全体より手前に出すもの。
-         main の中に置くと main の重なり順（z-index: 10）に閉じ込められ、ヘッダーや下部バーより下になってしまう -->
+    {/* 詳細のポップアップなど、ページ全体より手前に出すもの。
+         main の中に置くと main の重なり順（z-index: 10）に閉じ込められ、ヘッダーや下部バーより下になってしまう */}
     <slot name="overlay" />
   </body>
 </html>

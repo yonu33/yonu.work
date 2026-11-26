@@ -17,7 +17,7 @@ const VISIBLE_HISTORY = 5;
 const historyRows = history.slice().reverse().map(item => ({ ...item, year: item.date.slice(0, 4) }));
 ---
 
-<!-- 1ページだけのサイトなので、タイトルはサイト名のみ（title を渡さない） -->
+{/* 1ページだけのサイトなので、タイトルはサイト名のみ（title を渡さない） */}
 <Layout>
   <div id="top" data-scroll-scene="passport" class="py-10">
     <Hero />
@@ -32,7 +32,7 @@ const historyRows = history.slice().reverse().map(item => ({ ...item, year: item
       </div>
       <div class="resume-grid">
         <div class="resume-left">
-          <!-- data-nosnippet：検索結果の抜粋にこの表（誕生日・出身地など）を使わせない。見た目は変わらない -->
+          {/* data-nosnippet：検索結果の抜粋にこの表（誕生日・出身地など）を使わせない。見た目は変わらない */}
           <dl class="resume-sheet divide-y divide-[var(--border-color)]" data-nosnippet>
             {profile.personal.map(item => (
               <div class="resume-row grid grid-cols-[5.5rem_1fr] gap-3 px-4 py-2">
@@ -237,8 +237,8 @@ const historyRows = history.slice().reverse().map(item => ({ ...item, year: item
 
     <Footer />
   </div>
-  <!-- プロジェクト詳細のポップアップ一式。slot="overlay" で main の外（body 直下）に出して、ヘッダーや下部バーより手前に重ねる。
-       スクリプトもここに置き、ポップアップの要素より後で実行されるようにする -->
+  {/* プロジェクト詳細のポップアップ一式。slot="overlay" で main の外（body 直下）に出して、ヘッダーや下部バーより手前に重ねる。
+       スクリプトもここに置き、ポップアップの要素より後で実行されるようにする */}
   <Fragment slot="overlay">
   <div id="project-backdrop" class="project-backdrop hidden" aria-hidden="true"></div>
   <aside id="project-popover" class="project-popover hidden" role="dialog" aria-modal="true" aria-labelledby="project-popover-title">
