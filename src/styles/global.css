@@ -1091,6 +1091,78 @@ body * {
   letter-spacing: .12em;
 }
 
+/* ---------- これまでの記録：種類のラベルと絞り込み ---------- */
+.history-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-bottom: .9rem;
+}
+
+.history-filter[hidden] {
+  display: none;
+}
+
+.history-filter button {
+  padding: .2rem .65rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-main);
+  font-size: .8rem;
+  line-height: 1.6;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background-color .15s;
+}
+
+.history-filter button:hover {
+  border-color: var(--accent-strong);
+  color: var(--accent-strong);
+}
+
+/* 選んでいる種類は塗りつぶす */
+.history-filter button[aria-pressed="true"] {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+  color: var(--bg-card);
+}
+
+/* 件数 */
+.history-filter button span {
+  margin-left: .35rem;
+  opacity: .7;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 各記録の種類ラベル（PC では日付と本文のあいだの列、スマホでは日付の横） */
+.history-type {
+  justify-self: start;
+  align-self: start;
+  padding: 0 .4rem;
+  border: 1px solid color-mix(in srgb, var(--accent-cool) 45%, transparent);
+  color: var(--accent-cool);
+  font-size: .72rem;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+/* 行や年の見出しは hidden 属性で隠す（grid などの display 指定より優先させる） */
+.mars-timetable > [hidden] {
+  display: none !important;
+}
+
+@media (max-width: 767px) {
+  /* 1行目に日付と種類、2行目に本文 */
+  .marsu-row {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: .6rem;
+    align-items: center;
+  }
+
+  .marsu-row > :last-child {
+    grid-column: 1 / -1;
+  }
+}
+
 /* ---------- 相互リンク：このサイトへのリンク ---------- */
 .link-kit {
   padding: 1rem 1.25rem;

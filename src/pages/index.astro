@@ -6,7 +6,7 @@ import MutualLinks from '../components/MutualLinks.astro';
 import Footer from '../components/Footer.astro';
 import { profile } from '../data/profile.js';
 import { projects } from '../data/projects.js';
-import { history } from '../data/history.js';
+import { history, historyTypes } from '../data/history.js';
 import { getGithubLanguages } from '../lib/githubLanguages.js';
 
 // 公開リポジトリの使用言語（ビルド時に GitHub から集計）
@@ -15,6 +15,17 @@ const githubLanguages = await getGithubLanguages();
 // これまでの記録：新しい順に並べ、最初の VISIBLE_HISTORY 件だけ表示する（残りは「すべて表示」で開く）
 const VISIBLE_HISTORY = 5;
 const historyRows = history.slice().reverse().map(item => ({ ...item, year: item.date.slice(0, 4) }));
+
+// 記録の種類（絞り込みボタンとラベル）。種類が未設定・不明な記録があればビルドを止めて知らせる
+const untyped = history.filter(item => !(item.type in historyTypes));
+if (untyped.length > 0) {
+  throw new Error(`history.js：type が未設定または不明な記録があります（${untyped.map(item => item.date).join(', ')}）`);
+}
+const historyFilters = Object.entries(historyTypes).map(([type, label]) => ({
+  type,
+  label,
+  count: history.filter(item => item.type === type).length,
+}));
 ---
 
 {/* 1ページだけのサイトなので、タイトルはサイト名のみ（title を渡さない） */}
@@ -145,19 +156,32 @@ const historyRows = history.slice().reverse().map(item => ({ ...item, year: item
           <h2>これまでの記録</h2>
         </div>
       </div>
+      {/* 種類で絞り込むボタン。JavaScript が動かないと押しても何も起きないので、最初は隠しておきスクリプトで出す */}
+      <div id="history-filter" class="history-filter" role="group" aria-label="記録の種類で絞り込む" hidden>
+        <button type="button" data-history-filter="all" aria-pressed="true">すべて<span>{history.length}</span></button>
+        {historyFilters.map(filter => (
+          <button type="button" data-history-filter={filter.type} aria-pressed="false">{filter.label}<span>{filter.count}</span></button>
+        ))}
+      </div>
+      {/* 表示・非表示は hidden 属性で切り替える（クラスだと区切り線 divide-y が隠れた行の次にも付いてしまうため） */}
       <div class="mars-timetable retro-panel divide-y divide-[var(--border-color)]">
         {historyRows.map((item, index) => (
           <Fragment>
-            {/* 年が変わるところに見出しを入れる（その年の記録がすべて折りたたみ対象なら見出しも隠す） */}
+            {/* 年が変わるところに見出しを入れる（その年の記録がすべて隠れているときは見出しも隠す） */}
             {(index === 0 || historyRows[index - 1].year !== item.year) && (
-              <h3 class={`marsu-year px-4 py-1.5 ${index >= VISIBLE_HISTORY ? 'history-extra hidden' : ''}`}>
+              <h3 class="marsu-year px-4 py-1.5" data-history-year={item.year} hidden={index >= VISIBLE_HISTORY}>
                 {item.year}
               </h3>
             )}
             <div
-              class={`marsu-row grid gap-1 px-4 py-3 md:grid-cols-[9.5rem_1fr] md:gap-4 ${index >= VISIBLE_HISTORY ? 'history-extra hidden' : ''}`}
+              class="marsu-row grid gap-1 px-4 py-3 md:grid-cols-[9.5rem_5.25rem_1fr] md:gap-4"
+              data-history-type={item.type}
+              data-history-year={item.year}
+              data-history-extra={index >= VISIBLE_HISTORY ? '' : undefined}
+              hidden={index >= VISIBLE_HISTORY}
             >
               <time class="ticket-label pt-0.5"><span class="mars-dot"></span>{item.date}</time>
+              <span class="history-type">{historyTypes[item.type]}</span>
               {item.href ? (
                 <a href={item.href} target="_blank" rel="noopener noreferrer" class="text-sm leading-relaxed hover:underline">
                   {item.text}
@@ -181,17 +205,47 @@ const historyRows = history.slice().reverse().map(item => ({ ...item, year: item
         </button>
       )}
       <script is:inline>
-        const historyToggle = document.getElementById('history-toggle');
-        if (historyToggle) {
-          historyToggle.addEventListener('click', () => {
-            const extraItems = document.querySelectorAll('.history-extra');
-            const expanded = historyToggle.getAttribute('aria-expanded') === 'true';
+        {
+          // 「すべて」のときは新しい順に数件だけ出し、残りは「すべて表示」で開く。
+          // 種類を選んだときは、その種類の記録を全部出す（「すべて表示」ボタンは隠す）
+          const filterBar = document.getElementById('history-filter');
+          const historyToggle = document.getElementById('history-toggle');
+          const rows = [...document.querySelectorAll('#history .marsu-row')];
+          const years = [...document.querySelectorAll('#history .marsu-year')];
+          let currentFilter = 'all';
+          let expanded = false;
 
-            extraItems.forEach(item => item.classList.toggle('hidden', expanded));
-            historyToggle.setAttribute('aria-expanded', String(!expanded));
-            historyToggle.textContent = expanded
-              ? `過去の履歴をすべて表示 (${historyToggle.dataset.total}件)`
-              : '履歴を折りたたむ';
+          const render = () => {
+            rows.forEach(row => {
+              row.hidden = currentFilter === 'all'
+                ? !expanded && row.hasAttribute('data-history-extra')
+                : row.dataset.historyType !== currentFilter;
+            });
+            years.forEach(year => {
+              year.hidden = !rows.some(row => !row.hidden && row.dataset.historyYear === year.dataset.historyYear);
+            });
+            filterBar.querySelectorAll('button').forEach(button => {
+              button.setAttribute('aria-pressed', String(button.dataset.historyFilter === currentFilter));
+            });
+            if (historyToggle) {
+              historyToggle.hidden = currentFilter !== 'all';
+              historyToggle.setAttribute('aria-expanded', String(expanded));
+              historyToggle.textContent = expanded
+                ? '履歴を折りたたむ'
+                : `過去の履歴をすべて表示 (${historyToggle.dataset.total}件)`;
+            }
+          };
+
+          filterBar.hidden = false;
+          filterBar.addEventListener('click', event => {
+            const button = event.target.closest('button[data-history-filter]');
+            if (!button) return;
+            currentFilter = button.dataset.historyFilter;
+            render();
+          });
+          historyToggle?.addEventListener('click', () => {
+            expanded = !expanded;
+            render();
           });
         }
       </script>
