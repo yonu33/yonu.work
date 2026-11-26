@@ -47,17 +47,10 @@
     top: 50%;
     transform: translateY(-50%);
   }
-  .meta {
-    padding-bottom: 14px;
-    margin-bottom: 22px;
-    border-bottom: 2px dashed #9db4ca;
-    color: #176f9f;
-    font-size: 22px;
-    letter-spacing: 0.12em;
-  }
+  /* 名前を主役に（トップの切符と同じく「yonu」をいちばん大きく） */
   .name {
-    font-size: 96px;
-    line-height: 1;
+    font-size: 150px;
+    line-height: 0.9;
     letter-spacing: 0.01em;
   }
   .lead {
@@ -65,15 +58,22 @@
     font-size: 36px;
     line-height: 1.5;
   }
+  /* 画像の外にドメインを出さないサービス（Discord など）向けに、サイト名も小さく添える */
+  .site {
+    margin-top: 22px;
+    color: #176f9f;
+    font-size: 26px;
+    letter-spacing: 0.06em;
+  }
 </style>
 </head>
 <body>
   <img class="cat" src="cat.png" alt="">
   <div class="perforation"></div>
   <div class="text">
-    <p class="meta">ID: YONU33</p>
-    <p class="name">yonu.work</p>
+    <p class="name">yonu</p>
     <p class="lead">作って、仲間を集めて、<br>ときどき旅に出る。</p>
+    <p class="site">yonu.work</p>
   </div>
 </body>
 </html>

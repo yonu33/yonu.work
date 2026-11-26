@@ -106,5 +106,10 @@ try {
 } finally {
   browser.kill();
   await sleep(500);
-  rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+  // ブラウザの終了処理中で一時フォルダを消せないことがあるが、画像の作成には関係ないので無視する
+  try {
+    rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 300 });
+  } catch {
+    /* 一時フォルダは OS の一時領域にあるので、残っても問題ない */
+  }
 }
