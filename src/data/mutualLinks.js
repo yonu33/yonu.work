@@ -1,15 +1,16 @@
 // 相互リンク。上から順に表示する。カードの見出しはサイト名、その横に name（敬称略）を出す。
 //
-// サイト名と紹介文は、ビルド時に各サイトの <title> と説明文（meta description）を自動で取得する
-// （src/lib/mutualLinks.js）。ここの siteName / description は、取得できなかったときの予備。
-// 長い場合はカードで 2 行に省略し、カーソルを乗せると全文が出る。
+// サイト名・紹介文・アイコンは、ビルド時に各サイトから自動で取得する（src/lib/mutualLinks.js）。
+// ここの siteName / description は、取得できなかったときの予備。
+// 紹介文が長い場合はカードで 2 行に省略し、カーソルを乗せると全文が出る。
 //
-// icon は public/mutual/ に置いた 96×96 の画像（表示は 48×48）。相手のサイトの画像は、
-// サイトを作り直すたびに URL が変わることが多いので、直リンクせずに縮小コピーを置いている。
-// iconSource は取得元（相手がアイコンを変えたら、ここから取り直す）。
-// icon を書かなければ、名前の頭文字を表示する。
+// アイコンは相手のサーバーの画像に直リンクする（他の人の画像のコピーはリポジトリに置かない）。
+//   icon     … URL が変わらない画像（配布されているアイコンや GitHub のアイコン）はここに直接書く
+//   iconFrom … 作り直すたびに URL が変わる画像は、ページからの探し方を書く
+//              { meta: 'og:image' } その meta タグの画像 / { img: '文字列' } その文字列を含む <img>
+// どちらも見つからなければ、名前の頭文字を表示する。
 //
-// 2026-11-26 時点で、どのサイトにも直リンク・転載を禁止する記載はなかった
+// 2026-11-26 時点で、どのサイトにも直リンクを禁止する記載はなかった
 // （montblank.fun は「アイコン・バナーは直リンクして大丈夫」と明記）。
 export const mutualLinks = [
   {
@@ -17,39 +18,35 @@ export const mutualLinks = [
     siteName: "しばかぶメモ",
     url: "https://memo.shibadogcap.com/",
     description: "初心者のよわよわメモ",
-    icon: "/mutual/shibadogcap.png",
-    iconSource: "https://memo.shibadogcap.com/ （ブログのアバター）",
+    iconFrom: { img: "site-logo" }, // ブログのアバター
   },
   {
     name: "トラマト",
     siteName: "トラマトのホームページ",
     url: "https://toramutton.me/",
     description: "日常と技術の、ごちゃまぜ記録",
-    icon: "/mutual/toramutton.png",
-    iconSource: "https://toramutton.me/ （OGP 画像）",
+    iconFrom: { meta: "og:image" },
   },
   {
     name: "えぬぴー",
     siteName: "Np's pages",
     url: "https://negapainter.work/",
     description: "ニンテンドースイッチの自作ソフトや3D, 2Dのキャラ制作, ウェブ, AtCoder, CTFなど浅く広く気が向いたらやってます.",
-    icon: "/mutual/negapainter.png",
-    iconSource: "https://negapainter.work/ （トップページのメイン画像）",
+    iconFrom: { img: "/_astro/hero." }, // トップページのメイン画像
   },
   {
     name: "そらい",
     siteName: "Sorai",
     url: "https://sudo-sorai.dev/",
     description: "Web Front / Game Developer",
-    icon: "/mutual/sorai.png",
-    iconSource: "https://sudo-sorai.dev/ （Profile の写真を正方形に切り抜き）",
+    // サイトの写真はスクリプトで読み込まれ、ページから URL を探せないので GitHub のアイコン
+    icon: "https://github.com/sorai-loop.png",
   },
   {
     name: "まろん。",
     siteName: "まろん｡のポートフォリオ",
     url: "https://montblank.fun/",
     description: "JavaScript / TypeScript / Web を触っている大学生の個人開発勢です。主にOSS開発とネタ開発をしています。フロントエンドよりもバックエンドのほうが得意です。最近は開発バイトしてます。",
-    icon: "/mutual/montblank.png",
-    iconSource: "https://montblank.fun/icon.png （配布されているアイコン）",
+    icon: "https://montblank.fun/icon.png", // 配布されているアイコン（直リンク可と明記）
   },
 ];
