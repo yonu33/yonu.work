@@ -16,7 +16,7 @@ export const profile = {
     { label: "出身地", value: "宮城県仙台市" },
     { label: "所属", value: "会津大学コンピュータ理工学部（2025年度入学・33期生）、GDGoC Aizu（Main Organizer）" },
     { label: "サークル", value: "カンフー部、DMC、アニメ研究会、Zli 等" },
-    { label: "趣味", value: "旅行、音楽、ラーメン" },
+    { label: "趣味", value: "旅行、音楽、韓国語" },
     { label: "関心領域", value: "AI / LLM, Web開発, セキュリティ, 電子工作"}
   ],
   tech: [
