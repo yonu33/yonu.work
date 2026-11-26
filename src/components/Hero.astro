@@ -8,6 +8,10 @@ import noteSvg from '../assets/icons/note.svg?raw';
 // はてなブログの公式の小アイコンは Simple Icons にないので、ペンの形のアイコン（MDI fountain-pen-tip）で代用
 import hatenaBlogSvg from '../assets/icons/hatenablog.svg?raw';
 import discordSvg from '../assets/icons/discord.svg?raw';
+
+// 切符の発券情報。仙台発、行き先は未定、いまは会津で乗り継ぎ中。
+// 狭い画面では項目の途中で折り返さず、「/」の位置でだけ折り返す
+const ticketMeta = ['FROM: SENDAI', 'TO: SOMEWHERE', 'TRANSIT: AIZU', 'ID: YONU33', 'ISSUE DATE: 2025.11.01'];
 ---
 
 <header class="ticket-hero mb-12 md:mb-16">
@@ -18,7 +22,11 @@ import discordSvg from '../assets/icons/discord.svg?raw';
       <img src={profile.avatar} alt={`${profile.name}のアイコン`} />
     </div>
     <div class="ticket-name">
-      <p class="ticket-meta-line">FROM: SENDAI / TO: AIZU / ID: YONU33 / ISSUE DATE: 2025.11.01</p>
+      <p class="ticket-meta-line">
+        {ticketMeta.map((item, i) => (
+          <Fragment>{i > 0 && ' / '}<span class="whitespace-nowrap">{item}</span></Fragment>
+        ))}
+      </p>
       <h1>yonu</h1>
       <p class="ticket-bio">{profile.bio}</p>
       <p class="ticket-role">{profile.role}</p>
