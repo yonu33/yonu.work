@@ -40,7 +40,9 @@ const isHome = Astro.url.pathname === '/';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <!-- iPhone の「ホーム画面に追加」で使うアイコン（180×180、サイトの青の背景） -->
+    <!-- 検索結果のアイコン用。Google は 48px の倍数の正方形を推奨しているので 192×192 も用意する（背景透明） -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <!-- iPhone の「ホーム画面に追加」で使うアイコン（180×180、背景透明。iPhone では透明部分が黒になる） -->
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{pageTitle}</title>
 
