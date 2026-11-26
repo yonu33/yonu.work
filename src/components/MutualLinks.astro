@@ -1,6 +1,8 @@
 ---
-// 相互リンクの一覧とアイコンは src/data/mutualLinks.js で管理する
-import { mutualLinks } from '../data/mutualLinks.js';
+// 相互リンクの一覧とアイコンは src/data/mutualLinks.js で管理する。
+// 紹介文はビルド時に各サイトから自動で取得する（取れなければ mutualLinks.js の description）
+import { getMutualLinks } from '../lib/mutualLinks.js';
+const mutualLinks = await getMutualLinks();
 
 // 「このサイトへのリンク」に載せる情報
 const linkKit = [

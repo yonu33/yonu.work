@@ -15,7 +15,7 @@ Astro と Tailwind CSS で作った 1 ページの静的サイトで、Cloudflar
 | これまでの記録 | `src/data/history.js` |
 | GitHub の使用言語 | ビルド時に公開リポジトリから自動で集計（`src/lib/githubLanguages.js`）。CSS・HTML などは除く。取得に失敗したら `src/data/githubLanguages.js` の予備の値。ビルド環境に `GITHUB_TOKEN` を設定すると、GitHub の取得回数の制限に当たりにくくなる |
 | 記事・発信 | 自動で取得（下の「記事一覧」） |
-| 相互リンク | `src/data/mutualLinks.js`（アイコンは `public/mutual/` に 96×96 で置く） |
+| 相互リンク | `src/data/mutualLinks.js`（アイコンは `public/mutual/` に 96×96 で置く）。紹介文はビルド時に各サイトの説明文を自動で取得し、取れなければ `description` を使う（`src/lib/mutualLinks.js`） |
 | このサイトへのリンク（相互リンクしてくれる人向けの情報） | `src/components/MutualLinks.astro` |
 | トップのチケット（SNS リンク・発券情報） | `src/components/Hero.astro` |
 | サイトの説明文（検索結果や SNS で共有したときに出る文） | `src/layouts/Layout.astro` |
@@ -82,7 +82,7 @@ src/
   layouts/      ページ共通の枠（ヘッダー、左右の目次、スマホの下部ナビ、<head>）
   components/   トップのチケット、記事、相互リンク、フッター、テーマ切り替え
   data/         サイトの内容（プロフィール・作ったもの・記録・相互リンク・記事などの予備の値）
-  lib/          記事一覧と GitHub の使用言語の取得
+  lib/          記事一覧・GitHub の使用言語・相互リンクの紹介文の取得
   styles/       見た目（末尾の「文字サイズの底上げ」で文字の大きさをまとめて調整）
   assets/icons/ SNS のアイコン
 public/         そのまま配信するファイル（アイコン画像、相互リンクのアイコン、_headers、_redirects、robots.txt）
