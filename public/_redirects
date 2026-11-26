@@ -1,0 +1,6 @@
+# Cloudflare Pages のリダイレクト設定（https://developers.cloudflare.com/pages/configuration/redirects/）
+# 以前の構成にあったページの URL を、今のトップページの該当セクションへ転送する。
+# 外部からのリンク（相互リンク先や検索結果）が 404 にならないようにするため。
+/top        /           301
+/about      /#profile   301
+/projects   /#projects  301

@@ -1,27 +1,6 @@
 ---
-const mutualLinks = [
-  { 
-    name: "柴犬被り 氏", 
-    url: "https://memo.shibadogcap.com/"
-  },
-  { 
-    name: "トラマト 氏", 
-    url: "https://toramutton.me/"
-  },
-  {
-    name: "えぬぴー 氏",
-    url: "https://negapainter.work/"
-  },
-  {
-    name: "そらい 氏",
-    url: "https://sudo-sorai.dev/"
-  }
-];
-
-const getFavicon = (siteUrl) => {
-  const domain = new URL(siteUrl).hostname;
-  return `https://images.weserv.nl/?url=https://www.google.com/s2/favicons?domain=${domain}&sz=128&lbc=1`;
-};
+// 相互リンクの一覧とアイコンは src/data/mutualLinks.js で管理する
+import { mutualLinks } from '../data/mutualLinks.js';
 
 // 「このサイトへのリンク」に載せる情報
 const linkKit = [
@@ -50,15 +29,19 @@ const linkKit = [
         class="retro-panel group flex items-center gap-3 md:gap-4 p-3 md:p-4 hover:border-[var(--accent-strong)] transition-colors"
       >
         <div class="w-12 h-12 shrink-0 flex items-center justify-center bg-[var(--bg-page)] overflow-hidden border border-[var(--border-color)]">
-          <!-- アイコンが取得できなかったときは、名前の頭文字に差し替える -->
-          <img
-            src={getFavicon(site.url)}
-            alt=""
-            class="w-7 h-7 object-contain"
-            loading="lazy"
-            onerror="this.hidden = true; this.nextElementSibling.hidden = false;"
-          />
-          <span class="text-lg font-bold text-[var(--accent-strong)]" aria-hidden="true" hidden>{site.name.charAt(0)}</span>
+          <!-- アイコンがない・読み込めないときは、名前の頭文字に差し替える -->
+          {site.icon && (
+            <img
+              src={site.icon}
+              alt=""
+              width="48"
+              height="48"
+              class="w-full h-full object-cover"
+              loading="lazy"
+              onerror="this.hidden = true; this.nextElementSibling.hidden = false;"
+            />
+          )}
+          <span class="text-lg font-bold text-[var(--accent-strong)]" aria-hidden="true" hidden={Boolean(site.icon)}>{site.name.charAt(0)}</span>
         </div>
 
         <div class="overflow-hidden">

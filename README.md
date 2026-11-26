@@ -15,7 +15,8 @@ Astro と Tailwind CSS で作った 1 ページの静的サイトで、Cloudflar
 | これまでの記録 | `src/data/history.js` |
 | GitHub の使用言語 | ビルド時に公開リポジトリから自動で集計（`src/lib/githubLanguages.js`）。CSS・HTML などは除く。取得に失敗したら `src/data/githubLanguages.js` の予備の値。ビルド環境に `GITHUB_TOKEN` を設定すると、GitHub の取得回数の制限に当たりにくくなる |
 | 記事・発信 | 自動で取得（下の「記事一覧」） |
-| 相互リンク・このサイトへのリンク | `src/components/MutualLinks.astro` |
+| 相互リンク | `src/data/mutualLinks.js`（アイコンは `public/mutual/` に 96×96 で置く） |
+| このサイトへのリンク（相互リンクしてくれる人向けの情報） | `src/components/MutualLinks.astro` |
 | トップのチケット（SNS リンク・発券情報） | `src/components/Hero.astro` |
 | サイトの説明文（検索結果や SNS で共有したときに出る文） | `src/layouts/Layout.astro` |
 
@@ -66,6 +67,7 @@ npm run preview   # ビルド結果をローカルで確認
 | ファイル | 内容 |
 | --- | --- |
 | `public/_headers` | セキュリティ関連のヘッダーと、`/_astro/` 以下（CSS・JS）の長期キャッシュ |
+| `public/_redirects` | 以前の構成のページ（`/top`・`/about`・`/projects`）を、トップページの該当セクションへ転送する |
 | `public/robots.txt` | 検索エンジン向けの設定 |
 | `src/pages/sitemap.xml.js` | `sitemap.xml` をビルド時に作る。ページを増やしたら `paths` に追加する |
 | `src/pages/404.astro` | 存在しない URL のときのページ |
@@ -79,9 +81,9 @@ src/
   pages/        トップ（index.astro）、404、sitemap.xml
   layouts/      ページ共通の枠（ヘッダー、左右の目次、スマホの下部ナビ、<head>）
   components/   トップのチケット、記事、相互リンク、フッター、テーマ切り替え
-  data/         サイトの内容（プロフィール・作ったもの・記録・記事の予備リスト）
-  lib/          記事一覧の取得
+  data/         サイトの内容（プロフィール・作ったもの・記録・相互リンク・記事などの予備の値）
+  lib/          記事一覧と GitHub の使用言語の取得
   styles/       見た目（末尾の「文字サイズの底上げ」で文字の大きさをまとめて調整）
   assets/icons/ SNS のアイコン
-public/         そのまま配信するファイル（アイコン画像、_headers、robots.txt）
+public/         そのまま配信するファイル（アイコン画像、相互リンクのアイコン、_headers、_redirects、robots.txt）
 ```
