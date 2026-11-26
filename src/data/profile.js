@@ -10,6 +10,17 @@ export const profile = {
     { label: "mixi2", val: "@yonu", href: "https://mixi2.jp/u/yonu33" },
     { label: "Email", val: "contact[at]yonu.work"}
   ],
+  // 検索エンジンに「同じ人のアカウント」と伝える一覧（ページには表示しない。Layout.astro の JSON-LD で使う）
+  // Discord はコミュニティサーバーの招待リンクで本人のアカウントではないので入れない
+  sameAs: [
+    "https://github.com/yonu33",
+    "https://x.com/i/user/1898003250068262912",
+    "https://mixi2.jp/u/yonu33",
+    "https://qiita.com/yonu",
+    "https://zenn.dev/yonu",
+    "https://note.com/yonu33",
+    "https://yonu.hatenablog.jp/"
+  ],
   personal: [
     { label: "名前", value: "yonu" },
     { label: "生年月日", value: "2006年10月12日" },

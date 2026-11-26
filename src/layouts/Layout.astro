@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import ThemeIcon from '../components/ThemeIcon.astro';
+import { profile } from '../data/profile.js';
 const { title } = Astro.props;
 
 const siteName = "yonu.work";
@@ -35,6 +36,37 @@ const dockItems = [
 
 // 右サイドの「次のセクション」はトップページでだけ出す
 const isHome = Astro.url.pathname === '/';
+
+// 検索エンジン向けの構造化データ（JSON-LD）。ページには表示されない。トップページにだけ入れる
+// WebSite：検索結果に出すサイト名、Person：このサイトの持ち主と、同じ人のほかのアカウント
+const siteUrl = new URL('/', Astro.site ?? 'https://yonu.work').href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}#website`,
+      name: siteName,
+      url: siteUrl,
+      inLanguage: 'ja',
+      description: siteDescription,
+      author: { '@id': `${siteUrl}#person` },
+    },
+    {
+      '@type': 'Person',
+      '@id': `${siteUrl}#person`,
+      name: profile.name,
+      alternateName: 'yonu33',
+      url: siteUrl,
+      image: profile.avatar,
+      description: '旅好きな学生エンジニア',
+      affiliation: { '@type': 'CollegeOrUniversity', name: '会津大学', url: 'https://www.u-aizu.ac.jp/' },
+      sameAs: profile.sameAs,
+    },
+  ],
+};
+// </script> などが紛れ込んでもタグが閉じないよう、< をエスケープしてから埋め込む
+const jsonLdText = JSON.stringify(jsonLd).replaceAll('<', '\\u003c');
 ---
 
 <html lang="ja">
@@ -69,6 +101,7 @@ const isHome = Astro.url.pathname === '/';
     <meta name="twitter:description" content={siteDescription} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={ogImageAlt} />
+    {isHome && <script type="application/ld+json" set:html={jsonLdText} />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet" />
