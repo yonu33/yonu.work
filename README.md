@@ -36,7 +36,7 @@ Astro と Tailwind CSS で作った 1 ページの静的サイトで、Cloudflar
 
 ### 記事一覧
 
-記事はビルド時に Qiita（`yonu`）・Zenn（`yonu`）・note（`yonu33`）から自動で取得し、新しい順に最大 4 件表示します（`src/lib/articles.js`）。
+記事はビルド時に Qiita（`yonu`）・Zenn（`yonu`）・note（`yonu33`）・はてなブログ（`yonu.hatenablog.jp`）から自動で取得し、新しい順に最大 4 件表示します（`src/lib/articles.js`）。
 
 - 記事を書いたら、サイトを再デプロイすると反映されます。コードを変えずに再デプロイするには、空のコミットを push するか、Cloudflare のダッシュボードからデプロイをやり直します。
 

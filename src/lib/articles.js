@@ -1,7 +1,8 @@
 /**
- * 記事一覧をビルド時に Qiita / Zenn / note から取得する。
+ * 記事一覧をビルド時に Qiita / Zenn / note / はてなブログ から取得する。
  *
- * - サムネイルは note は RSS の画像、Qiita / Zenn は記事ページの OGP 画像を使う。
+ * - サムネイルは note は RSS の画像、はてなブログは RSS のアイキャッチ画像（なければ OGP 画像）、
+ *   Qiita / Zenn は記事ページの OGP 画像を使う。
  * - 取得に失敗したサービスは、src/data/articles.js の予備リストで補う（ビルドは止めない）。
  * - 開発サーバーでは同じ結果を CACHE_MS の間使い回す。
  */
@@ -9,6 +10,8 @@ import { fallbackArticles } from '../data/articles.js';
 
 /** 各サービスのユーザー名 */
 const ACCOUNTS = { qiita: 'yonu', zenn: 'yonu', note: 'yonu33' };
+/** はてなブログのアドレス */
+const HATENA_BLOG = 'https://yonu.hatenablog.jp';
 /** 表示する件数（新しい順） */
 const LIMIT = 4;
 const TIMEOUT_MS = 8000;
@@ -92,7 +95,27 @@ async function fetchNote() {
   });
 }
 
-const sources = { Qiita: fetchQiita, Zenn: fetchZenn, note: fetchNote };
+/** はてなブログの RSS を読む（xml は引数で渡せるようにしてある：テスト用） */
+export async function fetchHatena(xml) {
+  xml ??= await fetchText(`${HATENA_BLOG}/rss`);
+  const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].slice(0, LIMIT);
+  return Promise.all(
+    items.map(async ([, body]) => {
+      const pick = (tag) => decodeEntities(body.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`))?.[1]);
+      const url = pick('link');
+      const enclosure = decodeEntities(body.match(/<enclosure[^>]*url="([^"]+)"[^>]*type="image\//)?.[1] ?? '');
+      return {
+        platform: 'はてなブログ',
+        title: pick('title'),
+        url,
+        date: formatDate(pick('pubDate')),
+        thumbnail: enclosure || (url ? await ogImageOf(url) : ''),
+      };
+    }),
+  );
+}
+
+const sources = { Qiita: fetchQiita, Zenn: fetchZenn, note: fetchNote, はてなブログ: () => fetchHatena() };
 
 async function load() {
   const results = await Promise.all(

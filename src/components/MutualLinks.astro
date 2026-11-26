@@ -44,10 +44,16 @@ const linkKit = [
           <span class="text-lg font-bold text-[var(--accent-strong)]" aria-hidden="true" hidden={Boolean(site.icon)}>{site.name.charAt(0)}</span>
         </div>
 
-        <div class="overflow-hidden">
+        <div class="overflow-hidden min-w-0">
           <h3 class="font-bold text-sm md:text-base text-[var(--text-main)] truncate group-hover:text-[var(--accent-strong)] transition-colors">
             {site.name}
           </h3>
+          {site.description && (
+            <!-- 本人の紹介文。長いものは 2 行で省略し、カーソルを乗せると全文が出る -->
+            <p class="mutual-desc text-xs text-[var(--text-main)] leading-relaxed line-clamp-2 mt-0.5" title={site.description}>
+              {site.description}
+            </p>
+          )}
           <p class="text-[10px] text-[var(--text-muted)] font-mono truncate mt-0.5">
             {site.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
           </p>
