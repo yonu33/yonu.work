@@ -8,9 +8,13 @@ import { profile } from '../data/profile.js';
 import { projects } from '../data/projects.js';
 import { history, historyTypes } from '../data/history.js';
 import { getGithubLanguages } from '../lib/githubLanguages.js';
+import { getRepoStats } from '../lib/githubRepos.js';
 
 // 公開リポジトリの使用言語（ビルド時に GitHub から集計）
 const githubLanguages = await getGithubLanguages();
+
+// 作ったものの詳細に出す、リポジトリのスター数と最新コミットの日付（公開リポジトリだけ。projects と同じ並び）
+const projectRepoStats = await Promise.all(projects.map(project => getRepoStats(project.github)));
 
 // これまでの記録：新しい順に並べ、最初の VISIBLE_HISTORY 件だけ表示する（残りは「すべて表示」で開く）
 const VISIBLE_HISTORY = 5;
@@ -127,6 +131,8 @@ const historyFilters = Object.entries(historyTypes).map(([type, label]) => ({
             data-project-github={project.github}
             data-project-article={project.article || ''}
             data-project-site={project.site || ''}
+            data-project-stars={projectRepoStats[index]?.stars ?? ''}
+            data-project-last-commit={projectRepoStats[index]?.lastCommit ?? ''}
           >
             <div class="journey-card-head px-5 py-3 flex items-center justify-between">
               <span>LOG / {String(index + 1).padStart(2, '0')}</span>
@@ -303,6 +309,7 @@ const historyFilters = Object.entries(historyTypes).map(([type, label]) => ({
       <h2 id="project-popover-title"></h2>
       <p id="project-popover-description"></p>
       <dl id="project-popover-stack" class="project-popover-stack"></dl>
+      <p id="project-popover-repo" class="project-popover-repo" hidden></p>
       <div id="project-popover-links" class="project-popover-links"></div>
   </aside>
   <script is:inline>
@@ -341,6 +348,13 @@ const historyFilters = Object.entries(historyTypes).map(([type, label]) => ({
           );
           return row;
         }));
+        // リポジトリの情報（スターは 1 以上のときだけ）。どちらもなければ行ごと隠す
+        const repoInfo = [];
+        if (Number(d.projectStars) > 0) repoInfo.push(`★ ${d.projectStars}`);
+        if (d.projectLastCommit) repoInfo.push(`最新コミット ${d.projectLastCommit}`);
+        field('repo').textContent = repoInfo.join(' ・ ');
+        field('repo').hidden = repoInfo.length === 0;
+
         const links = [];
         if (d.projectSite) links.push(externalLink(d.projectSite, 'サイトを開く →'));
         if (d.projectArticle) links.push(externalLink(d.projectArticle, '解説記事 →'));

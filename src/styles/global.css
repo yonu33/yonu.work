@@ -1035,6 +1035,25 @@ body * {
   line-height: 1.6;
 }
 
+/* ---------- 作ったものの詳細：リポジトリのスター数と最新コミットの日付 ---------- */
+.project-popover-repo {
+  margin: 0;
+  padding: 1rem 1.25rem 0;
+  color: var(--text-muted);
+  font-size: .8rem;
+  letter-spacing: .06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.project-popover-repo[hidden] {
+  display: none;
+}
+
+/* リポジトリの情報があるときは、下のリンクとの間を少し詰める */
+.project-popover-repo:not([hidden]) + .project-popover-links {
+  padding-top: .6rem;
+}
+
 /* ---------- 自分について：GitHub の使用言語 ---------- */
 .gh-languages {
   margin-top: 1rem;
