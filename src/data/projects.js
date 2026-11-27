@@ -73,8 +73,7 @@ export const projects = [
       Database: "Cloudflare Workers KV",
       Infrastructure: "Cloudflare Workers, Cloudflare Pages"
     },
-    github: "https://github.com/jphacks/sd_2604",
-    site: "https://sd2604-frontend.pages.dev"
+    github: "https://github.com/jphacks/sd_2604"
   },
   {
     id: "tecupid",
