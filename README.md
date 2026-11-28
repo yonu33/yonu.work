@@ -10,15 +10,17 @@ Astro と Tailwind CSS で作った 1 ページの静的サイトで、Cloudflar
 
 | 変えたいもの | ファイル |
 | --- | --- |
-| プロフィール・技術スタック・連絡先 | `src/data/profile.js` |
+| プロフィール・技術スタック・連絡先 | `src/data/profile.js`。`sameAs` は検索エンジンに「同じ人のアカウント」と伝える一覧で、ページには表示しない（下の「検索エンジン向けの情報」） |
 | 作ったもの | `src/data/projects.js` |
 | これまでの記録 | `src/data/history.js` |
-| GitHub の使用言語 | ビルド時に公開リポジトリから自動で集計（`src/lib/githubLanguages.js`）。CSS・HTML などは除く。取得に失敗したら `src/data/githubLanguages.js` の予備の値。ビルド環境に `GITHUB_TOKEN` を設定すると、GitHub の取得回数の制限に当たりにくくなる |
+| GitHub の使用言語 | ビルド時に公開リポジトリから自動で集計（`src/lib/githubLanguages.js`）。CSS・HTML などは除く。取得に失敗したら `src/data/githubLanguages.js` の予備の値 |
+| 作ったものの詳細のスター数・最新コミット | ビルド時に各リポジトリから自動で取得（`src/lib/githubRepos.js`）。取得に失敗したら出さない |
 | 記事・発信 | 自動で取得（下の「記事一覧」） |
 | 相互リンク | `src/data/mutualLinks.js`。サイト名・紹介文・アイコンはビルド時に各サイトから自動で取得し、取れなければ `siteName` / `description` を使う（`src/lib/mutualLinks.js`）。アイコンは相手の画像への直リンクで、他の人の画像のコピーはリポジトリに置かない |
 | このサイトへのリンク（相互リンクしてくれる人向けの情報） | `src/components/MutualLinks.astro` |
 | トップのチケット（SNS リンク・発券情報） | `src/components/Hero.astro` |
 | サイトの説明文（検索結果や SNS で共有したときに出る文） | `src/layouts/Layout.astro` |
+| フッター（切符の半券。最終更新日はビルドした日が自動で入る） | `src/components/Footer.astro` |
 
 ### 作ったもの（`projects.js`）
 
@@ -26,13 +28,30 @@ Astro と Tailwind CSS で作った 1 ページの静的サイトで、Cloudflar
 | --- | --- |
 | `tags` | カードの表面に出す主な技術（2〜3 個） |
 | `stack` | 詳細に出す技術の表（`Frontend` などの見出しは自由） |
-| `github` | リポジトリの URL。`"非公開"` にするとリンクを出さない |
+| `github` | リポジトリの URL。`"非公開"` にするとリンクを出さない。`https://github.com/持ち主/リポジトリ` の形なら、詳細にスター数（1 以上のとき）と最新コミットの日付も出る（ビルドした時点の情報） |
 | `article` | 解説記事の URL（任意） |
 | `site` | 公開中のサイトの URL（任意）。詳細に「サイトを開く」が出る |
 
 ### これまでの記録（`history.js`）
 
 古い順に書きます。サイトでは新しい順に並び、年ごとに見出しが入ります。最初に表示するのは新しい 5 件だけで、それより古いものは「過去の履歴をすべて表示」で開きます（件数は `src/pages/index.astro` の `VISIBLE_HISTORY`）。
+
+各記録には `type`（種類）を必ず入れます。年表の上の絞り込みボタンと、各記録のラベルに使います。入れ忘れたり綴りを間違えたりするとビルドが止まり、どの日付の記録かが表示されます。
+
+```js
+{ date: "2026.11.01", type: "organize", text: "『TSKaigi Sendai 2026』にスタッフとして参加", href: "https://..." }
+```
+
+| `type` | 表示 |
+| --- | --- |
+| `organize` | 運営（スタッフ・主催・就任・設立） |
+| `talk` | 登壇・参加（LT 会・勉強会など） |
+| `compete` | 出場（ハッカソン・コンテスト） |
+| `make` | 制作・執筆（サイト・記事・寄稿など） |
+| `study` | 学業・資格 |
+| `hobby` | 旅・趣味 |
+
+種類を増やしたり名前を変えたりするときは、`history.js` の先頭の `historyTypes` を書き換えます（ボタンはこの順に並びます）。
 
 ### 記事一覧
 
@@ -79,6 +98,17 @@ npm run og        # リンクを貼ったときの画像（public/og.png）を�
 
 アクセス解析は Cloudflare Web Analytics を使っています（ダッシュボードで設定。コードの変更は不要）。
 
+GitHub からの取得（使用言語・リポジトリの情報）は、トークンがなくても動きますが、取得回数の制限に当たると予備の値になったり表示が消えたりします。Cloudflare Pages の環境変数に `GITHUB_TOKEN`（公開リポジトリを読むだけなので、権限なしの fine-grained token で十分）を設定すると安定します（`src/lib/github.js`）。
+
+### 検索エンジン向けの情報
+
+トップページの `<head>` に、構造化データ（JSON-LD）を入れています（`src/layouts/Layout.astro`）。ページには表示されません。
+
+- `WebSite`：検索結果に出すサイト名（`yonu.work`）と説明文
+- `Person`：このサイトの持ち主（名前・アイコン・所属）と、同じ人のほかのアカウント（`src/data/profile.js` の `sameAs`）
+
+SNS やブログを増やしたら `sameAs` に URL を足します。公開後は [リッチリザルト テスト](https://search.google.com/test/rich-results) で読み取れているかを確認できます。
+
 ## 構成
 
 ```
@@ -87,7 +117,7 @@ src/
   layouts/      ページ共通の枠（ヘッダー、左右の目次、スマホの下部ナビ、<head>）
   components/   トップのチケット、記事、相互リンク、フッター、テーマ切り替え
   data/         サイトの内容（プロフィール・作ったもの・記録・相互リンク・記事などの予備の値）
-  lib/          記事一覧・GitHub の使用言語・相互リンクの紹介文の取得
+  lib/          ビルド時の取得（記事一覧、GitHub の使用言語とリポジトリの情報、相互リンクのサイト名・紹介文・アイコン）
   styles/       見た目（末尾の「文字サイズの底上げ」で文字の大きさをまとめて調整）
   assets/icons/ SNS のアイコン
 public/         そのまま配信するファイル（アイコン画像、OGP 画像、_headers、_redirects、robots.txt）
