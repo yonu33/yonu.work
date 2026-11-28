@@ -37,8 +37,10 @@ const dockItems = [
   { name: 'Links', href: '/#links', icon: 'M10.59 13.41c.41.39.41 1.03 0 1.42c-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0a5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.98 2.98 0 0 0 0-4.24a2.98 2.98 0 0 0-4.24 0l-3.53 3.53a2.98 2.98 0 0 0 0 4.24m2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0a5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.43l-.47.47a2.98 2.98 0 0 0 0 4.24a2.98 2.98 0 0 0 4.24 0l3.53-3.53a2.98 2.98 0 0 0 0-4.24a.973.973 0 0 1 0-1.42' }, // link-variant
 ];
 
-// 右サイドの「次のセクション」はトップページでだけ出す
+// 左右の目次・右サイドの「次のセクション」・下部ナビはトップページでだけ出す
 const isHome = Astro.url.pathname === '/';
+const is404 = title === '404';
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://yonu.work').href;
 
 // 検索エンジン向けの構造化データ（JSON-LD）。ページには表示されない。トップページにだけ入れる
 // WebSite：検索結果に出すサイト名、Person：このサイトの持ち主と、同じ人のほかのアカウント
@@ -84,10 +86,11 @@ const jsonLdText = JSON.stringify(jsonLd).replaceAll('<', '\\u003c');
     <title>{pageTitle}</title>
 
     <meta name="description" content={siteDescription} />
+    {is404 ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonicalUrl} />}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:locale" content="ja_JP" />
-    <meta property="og:url" content={Astro.url} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={siteDescription} />
     <meta property="og:image" content={ogImage} />
@@ -130,19 +133,21 @@ const jsonLdText = JSON.stringify(jsonLd).replaceAll('<', '\\u003c');
     </div>
     {/* 左右の余白（1280px以上で表示）：左＝全セクションの目次、右＝次のセクション。
          現在地の強調と右の中身は index.astro のスクリプトが更新する */}
-    <nav class="side-route side-left side-toc" aria-label="目次">
-      <ol class="side-toc-list">
-        {tocItems.map(item => (
-          <li>
-            <a href={`/#${item.id}`} data-toc-id={item.id}>
-              <span class="side-toc-marker" aria-hidden="true"></span>
-              <span>{item.name}</span>
-            </a>
-          </li>
-        ))}
-      </ol>
-      <span class="side-line" aria-hidden="true"></span>
-    </nav>
+    {isHome && (
+      <nav class="side-route side-left side-toc" aria-label="目次">
+        <ol class="side-toc-list">
+          {tocItems.map(item => (
+            <li>
+              <a href={`/#${item.id}`} data-toc-id={item.id}>
+                <span class="side-toc-marker" aria-hidden="true"></span>
+                <span>{item.name}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <span class="side-line" aria-hidden="true"></span>
+      </nav>
+    )}
     {isHome && (
       <a id="scene-right-link" href="/#profile" class="side-route side-right">
         <span class="side-arrow" aria-hidden="true">→</span>
@@ -165,16 +170,18 @@ const jsonLdText = JSON.stringify(jsonLd).replaceAll('<', '\\u003c');
     <main class="mx-auto max-w-5xl px-5 md:px-8 pt-5 md:pt-8">
       <slot />
     </main>
-    <nav class="section-dock" aria-label="ページ内リンク">
-      {dockItems.map(item => (
-        <a href={item.href}>
-          <span aria-hidden="true">
-            <svg width="1em" height="1em" viewBox="0 0 24 24" style="display:inline-block;vertical-align:-0.125em"><path fill="currentColor" d={item.icon} /></svg>
-          </span>
-          <strong>{item.name}</strong>
-        </a>
-      ))}
-    </nav>
+    {isHome && (
+      <nav class="section-dock" aria-label="ページ内リンク">
+        {dockItems.map(item => (
+          <a href={item.href}>
+            <span aria-hidden="true">
+              <svg width="1em" height="1em" viewBox="0 0 24 24" style="display:inline-block;vertical-align:-0.125em"><path fill="currentColor" d={item.icon} /></svg>
+            </span>
+            <strong>{item.name}</strong>
+          </a>
+        ))}
+      </nav>
+    )}
     {/* 詳細のポップアップなど、ページ全体より手前に出すもの。
          main の中に置くと main の重なり順（z-index: 10）に閉じ込められ、ヘッダーや下部バーより下になってしまう */}
     <slot name="overlay" />

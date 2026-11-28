@@ -73,7 +73,10 @@ export const projects = [
       Database: "Cloudflare Workers KV",
       Infrastructure: "Cloudflare Workers, Cloudflare Pages"
     },
-    github: "https://github.com/jphacks/sd_2604"
+    github: "https://github.com/jphacks/sd_2604",
+    // リポジトリの README に載せているアプリの画面
+    image: "https://github.com/user-attachments/assets/da46d28b-b139-4ccf-bbec-172ce1c2f16e",
+    imageAlt: "もうつくの待ち合わせマップと到着予想時刻の画面"
   },
   {
     id: "tecupid",

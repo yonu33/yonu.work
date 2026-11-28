@@ -10,3 +10,10 @@
 # ビルドで作られる CSS / JS はファイル名に内容のハッシュが入るので、1年間キャッシュしてよい
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# pages.dev のプレビュー・配信用 URL が yonu.work と重複して検索結果に出ないようにする
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex

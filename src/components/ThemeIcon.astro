@@ -1,19 +1,23 @@
-<button 
-  id="themeToggle" 
-  class="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] hover:border-blue-500 transition-all shadow-sm group"
-  aria-label="Toggle dark mode"
+<button
+  id="themeToggle"
+  type="button"
+  class="w-9 h-9 grid place-items-center bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-main)] hover:border-[var(--accent-strong)] hover:text-[var(--accent-strong)] transition-colors group"
+  aria-label="テーマを切り替える"
+  title="テーマを切り替える"
 >
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    class="sun hidden dark:block w-5 h-5 text-yellow-500 group-hover:rotate-45 transition-transform duration-300" 
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    class="sun hidden dark:block w-4 h-4 group-hover:rotate-45 transition-transform duration-300"
     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
   >
     <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
   </svg>
 
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    class="moon block dark:hidden w-5 h-5 text-slate-500 group-hover:-rotate-12 transition-transform duration-300" 
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    class="moon block dark:hidden w-4 h-4 group-hover:-rotate-12 transition-transform duration-300"
     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
   >
     <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>

@@ -9,12 +9,31 @@ import { projects } from '../data/projects.js';
 import { history, historyTypes } from '../data/history.js';
 import { getGithubLanguages } from '../lib/githubLanguages.js';
 import { getRepoStats } from '../lib/githubRepos.js';
+import { getProjectSiteImage } from '../lib/projectSite.js';
 
 // 公開リポジトリの使用言語（ビルド時に GitHub から集計）
 const githubLanguages = await getGithubLanguages();
 
-// 作ったものの詳細に出す、リポジトリのスター数と最新コミットの日付（公開リポジトリだけ。projects と同じ並び）
-const projectRepoStats = await Promise.all(projects.map(project => getRepoStats(project.github)));
+// よそのサーバーの大きな画像（GitHub に貼った画面写真など）は weserv で縮小・WebP 化する。
+// 自分のドメイン（*.yonu.work のドット絵 OGP など）や public/ の画像はにじまないようそのまま使う
+const optimizeProjectImage = (src) => {
+  if (!src || !/^https?:\/\//.test(src)) return src || '';
+  try {
+    const { hostname } = new URL(src);
+    if (hostname === 'yonu.work' || hostname.endsWith('.yonu.work') || hostname.endsWith('imgix.net')) return src;
+    return `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=800&output=webp&af`;
+  } catch {
+    return src;
+  }
+};
+
+// 作ったものの詳細に出す、リポジトリのスター数・最新コミット日と公開サイトの OGP 画像（projects と同じ並び）
+const [projectRepoStats, projectImages] = await Promise.all([
+  Promise.all(projects.map(project => getRepoStats(project.github))),
+  Promise.all(projects.map(async project => (
+    project.image === false ? '' : optimizeProjectImage(project.image || await getProjectSiteImage(project.site))
+  ))),
+]);
 
 // これまでの記録：新しい順に並べ、最初の VISIBLE_HISTORY 件だけ表示する（残りは「すべて表示」で開く）
 const VISIBLE_HISTORY = 5;
@@ -118,7 +137,7 @@ const historyFilters = Object.entries(historyTypes).map(([type, label]) => ({
         {projects.map((project, index) => (
           <div
             id={project.id}
-            class="journey-card retro-panel p-0 flex flex-col"
+            class="journey-card retro-panel p-0 flex flex-col scroll-mt-24"
             data-project-card
             tabindex="0"
             role="button"
@@ -126,6 +145,8 @@ const historyFilters = Object.entries(historyTypes).map(([type, label]) => ({
             data-project-title={project.title}
             data-project-description={project.description}
             data-project-period={project.period}
+            data-project-image={projectImages[index] || ''}
+            data-project-image-alt={project.imageAlt || ''}
             data-project-stack={JSON.stringify(project.stack)}
             data-project-github={project.github}
             data-project-article={project.article || ''}
@@ -133,9 +154,12 @@ const historyFilters = Object.entries(historyTypes).map(([type, label]) => ({
             data-project-stars={projectRepoStats[index]?.stars ?? ''}
             data-project-last-commit={projectRepoStats[index]?.lastCommit ?? ''}
           >
-            <div class="journey-card-head px-5 py-3 flex items-center justify-between">
+            <div class="journey-card-head px-5 py-3 flex items-center justify-between gap-2">
               <span>LOG / {String(index + 1).padStart(2, '0')}</span>
-              <span>{project.period}</span>
+              <span class="flex items-center gap-2">
+                {project.site && <span class="project-live">公開中</span>}
+                <span>{project.period}</span>
+              </span>
             </div>
             <div class="p-5 flex flex-col flex-1">
               <h3 class="mb-3 font-black text-lg text-[var(--text-main)]">{project.title}</h3>
@@ -302,10 +326,16 @@ const historyFilters = Object.entries(historyTypes).map(([type, label]) => ({
   <div id="project-backdrop" class="project-backdrop hidden" aria-hidden="true"></div>
   <aside id="project-popover" class="project-popover hidden" role="dialog" aria-modal="true" aria-labelledby="project-popover-title">
       <div class="project-popover-head">
-        <span id="project-popover-period"></span>
+        <span class="flex items-center gap-2">
+          <span id="project-popover-period"></span>
+          <span id="project-popover-live" class="project-live" hidden>公開中</span>
+        </span>
         <button type="button" data-popover-close aria-label="閉じる">×</button>
       </div>
       <h2 id="project-popover-title"></h2>
+      <figure id="project-popover-figure" class="project-popover-figure" hidden>
+        <img id="project-popover-image" alt="" decoding="async" onerror="this.parentElement.hidden = true;" />
+      </figure>
       <p id="project-popover-description"></p>
       <dl id="project-popover-stack" class="project-popover-stack"></dl>
       <p id="project-popover-repo" class="project-popover-repo" hidden></p>
@@ -313,13 +343,15 @@ const historyFilters = Object.entries(historyTypes).map(([type, label]) => ({
   </aside>
   <script is:inline>
     // プロジェクト詳細：カードの data-project-* 属性から中身を作って開く。
-    // クリック / Enter / Space で開き、× ボタン / Esc / 背景クリックで閉じる。閉じたら元のカードにフォーカスを戻す。
+    // クリック / Enter / Space で開き、× ボタン / Esc / 背景クリック / ブラウザの「戻る」で閉じる。
+    // URL の #id（例: /#tecupid）とも連動するので、特定作品の詳細をそのままリンク共有できる。
     (() => {
       const popover = document.getElementById('project-popover');
       const backdrop = document.getElementById('project-backdrop');
       if (!popover || !backdrop) return;
       const field = id => popover.querySelector(`#project-popover-${id}`);
       let openedFrom = null;
+      let pushedHash = false;
 
       // 開いている間は、ポップアップ以外（ヘッダー・本文・下部バーなど）を操作できなくする。
       // クリックだけでなく、Tab キーで背景のリンクに移ることも防ぐ
@@ -334,10 +366,34 @@ const historyFilters = Object.entries(historyTypes).map(([type, label]) => ({
         href, textContent: text, target: '_blank', rel: 'noopener noreferrer'
       });
 
-      const open = card => {
+      const findCardByHash = () => {
+        const id = decodeURIComponent(location.hash.slice(1));
+        if (!id) return null;
+        const el = document.getElementById(id);
+        return el?.hasAttribute('data-project-card') ? el : null;
+      };
+
+      const open = (card, { updateUrl = true } = {}) => {
+        if (openedFrom === card && !popover.classList.contains('hidden')) return;
+        if (openedFrom && openedFrom !== card) openedFrom.setAttribute('aria-expanded', 'false');
+
         const d = card.dataset;
         field('title').textContent = d.projectTitle;
         field('period').textContent = d.projectPeriod;
+        field('live').hidden = !d.projectSite;
+
+        const fig = field('figure');
+        const img = field('image');
+        if (d.projectImage) {
+          img.src = d.projectImage;
+          img.alt = d.projectImageAlt || `${d.projectTitle}の画面`;
+          fig.hidden = false;
+        } else {
+          img.removeAttribute('src');
+          img.alt = '';
+          fig.hidden = true;
+        }
+
         field('description').textContent = d.projectDescription;
         field('stack').replaceChildren(...Object.entries(JSON.parse(d.projectStack || '{}')).map(([category, value]) => {
           const row = document.createElement('div');
@@ -366,10 +422,16 @@ const historyFilters = Object.entries(historyTypes).map(([type, label]) => ({
         setBackgroundInert(true);
         card.setAttribute('aria-expanded', 'true');
         openedFrom = card;
+
+        if (updateUrl && card.id && location.hash !== `#${card.id}`) {
+          history.pushState(null, '', `#${card.id}`);
+          pushedHash = true;
+        }
+
         popover.querySelector('[data-popover-close]').focus();
       };
 
-      const close = () => {
+      const close = ({ fromHistory = false } = {}) => {
         if (popover.classList.contains('hidden')) return;
         popover.classList.add('hidden');
         backdrop.classList.add('hidden');
@@ -378,6 +440,25 @@ const historyFilters = Object.entries(historyTypes).map(([type, label]) => ({
         openedFrom?.setAttribute('aria-expanded', 'false');
         openedFrom?.focus();
         openedFrom = null;
+
+        if (fromHistory) {
+          pushedHash = false;
+        } else if (pushedHash) {
+          pushedHash = false;
+          history.back();
+        } else if (findCardByHash()) {
+          history.replaceState(null, '', location.pathname + location.search);
+        }
+      };
+
+      const syncFromHash = () => {
+        const card = findCardByHash();
+        if (card) {
+          pushedHash = false;
+          open(card, { updateUrl: false });
+        } else {
+          close({ fromHistory: true });
+        }
       };
 
       document.querySelectorAll('[data-project-card]').forEach(card => {
@@ -389,11 +470,14 @@ const historyFilters = Object.entries(historyTypes).map(([type, label]) => ({
           }
         });
       });
-      popover.querySelector('[data-popover-close]').addEventListener('click', close);
-      backdrop.addEventListener('click', close);
+      popover.querySelector('[data-popover-close]').addEventListener('click', () => close());
+      backdrop.addEventListener('click', () => close());
       document.addEventListener('keydown', event => {
         if (event.key === 'Escape') close();
       });
+      window.addEventListener('popstate', syncFromHash);
+      window.addEventListener('hashchange', syncFromHash);
+      if (location.hash) syncFromHash();
     })();
   </script>
   </Fragment>

@@ -12,22 +12,6 @@
     display: none !important;
   }
 
-  @media (min-width: 768px) {
-    body {
-      background-image:
-        linear-gradient(90deg, transparent 0 49.9%, color-mix(in srgb, var(--scene-accent) 5%, transparent) 50%, transparent 50.1%),
-        linear-gradient(0deg, transparent 0 79.9%, color-mix(in srgb, var(--scene-accent) 4%, transparent) 80%, transparent 80.1%);
-    }
-
-    .retro-panel {
-      box-shadow: 5px 5px 0 color-mix(in srgb, var(--scene-accent) 12%, transparent);
-    }
-
-    .retro-panel:hover {
-      border-color: var(--scene-accent);
-    }
-  }
-
   body,
   :root {
     background: #fff !important;
@@ -95,6 +79,11 @@
 
   html {
     background: var(--bg-page);
+  }
+
+  /* Tailwind の img { display: block } 等より hidden 属性を常に優先する */
+  [hidden] {
+    display: none !important;
   }
 
   body {
@@ -405,7 +394,7 @@
   @media (max-width: 1279px) {
     .section-dock {
       left: 50%;
-      bottom: 10px;
+      bottom: calc(10px + env(safe-area-inset-bottom, 0px));
       width: min(calc(100% - 20px), 460px);
       min-height: 54px;
       transform: translateX(-50%);
@@ -415,6 +404,11 @@
       background: color-mix(in srgb, var(--bg-card) 96%, transparent);
       box-shadow: 0 8px 28px rgba(27, 47, 72, .16);
       backdrop-filter: blur(12px);
+    }
+
+    /* 下部ナビに重ならないよう、フッター下の余白を確保する */
+    .ticket-stub {
+      padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
     }
 
     .section-dock a {
@@ -481,6 +475,11 @@
     border-radius: 0;
     cursor: pointer;
     min-height: 176px;
+    transition: border-color 150ms ease;
+  }
+
+  .journey-card:hover {
+    border-color: var(--accent-strong);
   }
 
   .journey-card:focus-visible {
@@ -1016,7 +1015,30 @@ body * {
   font-family: "DotGothic16", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif !important;
 }
 
-/* ---------- 作ったもののカード：技術タグ（GitHub・解説記事へのリンクは詳細のポップアップ内） ---------- */
+/* ---------- 作ったもののカード：公開中ラベル・技術タグ（GitHub・解説記事へのリンクは詳細のポップアップ内） ---------- */
+.project-live {
+  padding: 0 .4rem;
+  border: 1px solid color-mix(in srgb, var(--accent-cool) 55%, transparent);
+  color: var(--accent-cool);
+  font-size: .68rem;
+  line-height: 1.5;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+.project-popover-figure {
+  margin: 0;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-page);
+}
+
+.project-popover-figure img {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+}
+
 .project-tags {
   display: flex;
   flex-wrap: wrap;
