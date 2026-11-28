@@ -17,12 +17,48 @@ const scissorsPath = 'M19 3l-6 6l2 2l7-7V3m-10 9.5a.5.5 0 0 1-.5-.5a.5.5 0 0 1 .
   <div class="max-w-3xl mx-auto px-6 pt-10 text-center">
     <p class="stub-meta">
       <span class="whitespace-nowrap">yonu.work</span> / <span class="whitespace-nowrap">LAST UPDATE: <time datetime={today}>{lastUpdate}</time></span>
+      {/* アクセスカウンター（半券の通し番号）。数が取れたときだけスクリプトで出す */}
+      <span data-visit-counter hidden> / <span class="whitespace-nowrap" title="訪問者数（同じブラウザからは1日1回まで）">No. <span data-visit-count></span></span></span>
     </p>
     <p class="mt-2 text-[11px] text-[var(--text-muted)] tracking-wider">
       © 2025–{currentYear} yonu33
     </p>
   </div>
 </footer>
+
+<script is:inline>
+  {
+    // アクセスカウンター（functions/api/visits.js）。
+    // トップページを開いたときに、同じブラウザからは 1 日 1 回だけ数を 1 増やす（ブラウザには数えた日付だけを残す）。
+    // それ以外のとき（同じ日の 2 回目以降や 404 ページ）は数を読むだけ。取れなければ何も出さない。
+    // ページの表示を邪魔しないよう、読み込みが終わってから問い合わせる
+    const counter = document.querySelector('[data-visit-counter]');
+    const KEY = 'visit-counted-on';
+    const today = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10); // 日本時間の日付
+    let countedToday = false;
+    try { countedToday = localStorage.getItem(KEY) === today; } catch {}
+    const shouldCount = location.pathname === '/' && !countedToday;
+
+    const show = async () => {
+      try {
+        const res = await fetch('/api/visits', { method: shouldCount ? 'POST' : 'GET' });
+        if (!res.ok) return;
+        const { count } = await res.json();
+        if (!Number.isFinite(count) || count <= 0) return;
+        if (shouldCount) {
+          try { localStorage.setItem(KEY, today); } catch {}
+        }
+        counter.querySelector('[data-visit-count]').textContent = String(count).padStart(6, '0');
+        counter.hidden = false;
+      } catch {}
+    };
+
+    if (counter) {
+      if (document.readyState === 'complete') show();
+      else window.addEventListener('load', show, { once: true });
+    }
+  }
+</script>
 
 <style>
   .stub-cut {

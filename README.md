@@ -100,6 +100,28 @@ npm run og        # リンクを貼ったときの画像（public/og.png）を�
 
 GitHub からの取得（使用言語・リポジトリの情報）は、トークンがなくても動きますが、取得回数の制限に当たると予備の値になったり表示が消えたりします。Cloudflare Pages の環境変数に `GITHUB_TOKEN`（公開リポジトリを読むだけなので、権限なしの fine-grained token で十分）を設定すると安定します（`src/lib/github.js`）。
 
+### アクセスカウンター
+
+フッターの半券の「No. 000123」は訪問者数です。
+
+| 場所 | 内容 |
+| --- | --- |
+| `functions/api/visits.js` | Cloudflare Pages Functions の API。`GET /api/visits` で数を返し、`POST` で 1 増やす（POST は yonu.work からだけ受け付ける） |
+| `db/schema.sql` | 数を入れる表。D1 データベース `yonu-work-counter`（yonu33 のアカウント）に入っている |
+| `src/components/Footer.astro` | 表示。トップページを開いたときに、同じブラウザからは 1 日 1 回だけ数える（ブラウザには数えた日付だけを残す） |
+
+Pages の設定（Settings → Bindings）で、D1 データベース `yonu-work-counter` を変数名 `DB` でつないでいます。つながっていないときや数が取れないときは、番号を出さないだけでページは普通に表示されます。
+
+今の数を見る・直すときは、wrangler で D1 に直接問い合わせます（Cloudflare のアカウントが複数あるので、`npx wrangler whoami` で yonu33 のアカウント ID を確認して指定します）。
+
+```sh
+export CLOUDFLARE_ACCOUNT_ID=<yonu33 のアカウント ID>
+npx wrangler d1 execute yonu-work-counter --remote --command "SELECT * FROM counters"
+npx wrangler d1 execute yonu-work-counter --remote --command "UPDATE counters SET value = 0 WHERE name = 'visits'"
+```
+
+`npm run dev`（Astro の開発サーバー）では API が動かないので、番号は出ません。
+
 ### 検索エンジン向けの情報
 
 トップページの `<head>` に、構造化データ（JSON-LD）を入れています（`src/layouts/Layout.astro`）。ページには表示されません。
@@ -120,6 +142,8 @@ src/
   lib/          ビルド時の取得（記事一覧、GitHub の使用言語とリポジトリの情報、相互リンクのサイト名・紹介文・アイコン）
   styles/       見た目（末尾の「文字サイズの底上げ」で文字の大きさをまとめて調整）
   assets/icons/ SNS のアイコン
+functions/      Cloudflare Pages Functions（アクセスカウンターの API）
+db/             アクセスカウンター用の D1 データベースの表の定義
 public/         そのまま配信するファイル（アイコン画像、OGP 画像、_headers、_redirects、robots.txt）
 scripts/        OGP 画像を作るスクリプトとひな形（og/og.html・og/cat.png）
 ```
